@@ -71,9 +71,9 @@ class OnboardingPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        if (isLastPage) { /*
+                        if (isLastPage) {
                           Navigator.pushReplacementNamed(
-                              context, APPROUTES.loginScreen);*/
+                              context, APPROUTES.loginScreen);
                         } else {
                           pageController.nextPage(
                             duration: const Duration(milliseconds: 250),
