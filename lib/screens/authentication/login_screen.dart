@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                   //   Navigator.pushNamed(context, APPROUTES.registerScreen);
+                     Navigator.pushNamed(context, APPROUTES.registerScreen);
                     },
                     child: const Text(
                       "Create One",
