@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    //Navigator.pushNamed(context, APPROUTES.forgetPasswordScreen);
+                    Navigator.pushNamed(context, APPROUTES.forgetPasswordScreen);
                   },
                   child: const Text(
                     "Forget Password ?",
@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () {
-                  //  Navigator.pushNamed(context, APPROUTES.layoutScreen);
+                   Navigator.pushNamed(context, APPROUTES.layoutScreen);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
