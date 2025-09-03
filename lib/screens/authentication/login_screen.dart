@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () {
-                    //Navigator.pushNamed(context, APPROUTES.layoutScreen);
+                    Navigator.pushNamed(context, APPROUTES.layoutScreen);
                   },
                   child: const Text(
                     "Login",

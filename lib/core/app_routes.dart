@@ -4,6 +4,10 @@ import '../screens/authentication/forgot_password.dart';
 import '../screens/authentication/login_screen.dart';
 import '../screens/on_boarding/onboarding_view.dart';
 import 'layout_screen.dart';
+import 'package:movies/screens/profile_screen/profile_screen.dart';
+import 'package:movies/screens/profile_screen/edit_profile.dart';
+import 'package:movies/screens/profile_screen/update_data.dart';
+
 
 
 class APPROUTES{
@@ -12,6 +16,9 @@ class APPROUTES{
   static const String loginScreen="LoginScreen";
   static const String forgetPasswordScreen="ForgetPasswordScreen";
   static const String layoutScreen="LayoutScreen";
+  static const String profileScreen="ProfileScreen";
+  static const String editProfileScreen="EditProfileScreen";
+  static const String updateProfileScreen="UpdateProfileScreen";
 
 
 
@@ -28,6 +35,9 @@ class ROUTES{
     APPROUTES.loginScreen :(_)=> LoginPage(),
     APPROUTES.forgetPasswordScreen: (_) => const ForgetPasswordScreen(),
     APPROUTES.layoutScreen :(_)=> const  LayoutScreen(),
+    APPROUTES.profileScreen: (_) => const ProfileScreen(),
+    APPROUTES.editProfileScreen: (_) => const EditProfileScreen(),
+    APPROUTES.updateProfileScreen: (_) => const UpdateProfileScreen(),
 
 
 
