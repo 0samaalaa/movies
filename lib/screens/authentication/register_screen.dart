@@ -4,6 +4,7 @@ import 'package:movies/core/app_colors.dart';
 import 'package:movies/core/app_icons.dart';
 import 'package:movies/core/app_routes.dart';
 import 'package:movies/core/custom_text_filed.dart';
+import '../../core/avatar_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -44,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-           // const AvatarPicker(),
+            const AvatarPicker(),
             const SizedBox(height: 5),
             const Text(
               "Avatar",
