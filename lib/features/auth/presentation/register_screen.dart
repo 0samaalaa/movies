@@ -1,10 +1,12 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/core/app_routes.dart';
-import 'package:movies/core/custom_text_filed.dart';
-import '../../core/avatar_picker.dart';
+import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/app_icons.dart';
+import '../../../core/routes/routes.dart';
+import '../../../core/widgets/avatar_picker.dart';
+import '../../../core/widgets/custom_text_filed.dart';
+
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -150,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, APPROUTES.loginScreen);
+                    Navigator.pushNamed(context, Routes.loginScreen);
                   },
                   child: const Text(
                     "Login",

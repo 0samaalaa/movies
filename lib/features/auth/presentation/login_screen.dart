@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:movies/core/app_Images.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/core/app_routes.dart';
-import 'package:movies/core/custom_text_filed.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+
+import '../../../core/resources/app_Images.dart';
+import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/app_icons.dart';
+import '../../../core/routes/routes.dart';
+import '../../../core/widgets/custom_text_filed.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, APPROUTES.forgetPasswordScreen);
+                    Navigator.pushNamed(context, Routes.forgetPasswordScreen);
                   },
                   child: const Text(
                     "Forget Password ?",
@@ -96,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, APPROUTES.layoutScreen);
+                    Navigator.pushNamed(context, Routes.layoutScreen);
                   },
                   child: const Text(
                     "Login",
@@ -118,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                     Navigator.pushNamed(context, APPROUTES.registerScreen);
+                     Navigator.pushNamed(context, Routes.registerScreen);
                     },
                     child: const Text(
                       "Create One",
@@ -165,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () {
-                   Navigator.pushNamed(context, APPROUTES.layoutScreen);
+                   Navigator.pushNamed(context, Routes.layoutScreen);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

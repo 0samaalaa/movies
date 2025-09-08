@@ -1,29 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'core/app_bloc_observer.dart';
+import 'core/resources/app_colors.dart';
+import 'core/routes/route_generator.dart';
+import 'core/routes/routes.dart';
+import 'core/utils/preferences_helper.dart';
+import 'features/on_boarding/presentation/cubit/onboarding_cubit.dart';
 
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final preferencesHelper = PreferencesHelper(prefs);
+  final hasSeenOnboarding = preferencesHelper.hasSeenOnboarding;
+  Bloc.observer = AppBlocObserver();
 
-
-void main() {
-  runApp(const MyApp());
+  runApp(
+    BlocProvider(
+      create: (_) => OnboardingCubit(preferencesHelper),
+      child: MoviesApp(
+        hasSeenOnboarding: hasSeenOnboarding,
+      ),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key,});
+class MoviesApp extends StatelessWidget {
+  final bool hasSeenOnboarding;
+  const MoviesApp({
+    Key? key,
+    required this.hasSeenOnboarding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          scaffoldBackgroundColor: MColors.black,
-          appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.transparent,
-              iconTheme: IconThemeData(color: MColors.yellow),
-              titleTextStyle: TextStyle(color:MColors.yellow),
-              centerTitle: true)),
       debugShowCheckedModeBanner: false,
-      routes: ROUTES.routes,
-      initialRoute: APPROUTES.onboardingScreen,
+      theme: ThemeData(
+        scaffoldBackgroundColor: MColors.black,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: MColors.yellow),
+          titleTextStyle: TextStyle(color: MColors.yellow),
+          centerTitle: true,
+        ),
+      ),
+      initialRoute: hasSeenOnboarding
+          ? Routes.loginScreen
+          : Routes.onboardingScreen,
+      onGenerateRoute: RouteGenerator.getRoute,
     );
   }
 }

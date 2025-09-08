@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_Images.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/core/custom_text_filed.dart';
+
+import '../../../../core/resources/app_Images.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../../core/widgets/custom_text_filed.dart';
+
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});

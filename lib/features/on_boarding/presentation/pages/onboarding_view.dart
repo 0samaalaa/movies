@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/screens/on_boarding/onboarding_item.dart';
-import 'package:movies/screens/on_boarding/onboarding_page.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../widgets/onboarding_item.dart';
+import 'onboarding_page.dart';
 
 class OnboardingView extends StatefulWidget {
-  const OnboardingView({super.key});
+  const OnboardingView({
+    super.key,
+  });
 
   @override
   State<OnboardingView> createState() => _OnboardingViewState();
@@ -12,11 +14,11 @@ class OnboardingView extends StatefulWidget {
 
 class _OnboardingViewState extends State<OnboardingView> {
   final controller = OnboardingItems();
-  final Pagecontroller = PageController();
+  final PageController pageController = PageController();
 
   @override
   void dispose() {
-    Pagecontroller.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -25,7 +27,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     return Scaffold(
       backgroundColor: MColors.black,
       body: PageView.builder(
-        controller: Pagecontroller,
+        controller: pageController,
         itemCount: controller.items.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
@@ -38,7 +40,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             isFirstPage: isFirst,
             isLastPage: isLast,
             pageIndex: index,
-            pageController: Pagecontroller,
+            pageController: pageController,
           );
         },
       ),

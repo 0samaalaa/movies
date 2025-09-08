@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/screens/browse_screen/browse_screen.dart';
-import 'package:movies/screens/profile_screen/profile_screen.dart';
-import 'package:movies/screens/search_screen/search_screen.dart';
-import '../screens/home screen/home_screen.dart';
+
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../browse/presentation/pages/browse_screen.dart';
+import '../../../profile/presentation/pages/profile_screen.dart';
+import '../../../search/presentation/pages/search_screen.dart';
+import 'home_screen.dart';
+
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_Images.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/core/app_routes.dart';
+import '../../../../core/resources/app_Images.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -112,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
                               ),
-                              onPressed: () {Navigator.pushNamed(context, APPROUTES.editProfileScreen);},
+                              onPressed: () {Navigator.pushNamed(context, Routes.editProfileScreen);},
                               child: const Text("Edit Profile",
                                   style: TextStyle(
                                       color: MColors.black,
@@ -130,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              onPressed: () {Navigator.pushNamed(context, APPROUTES.loginScreen);},
+                              onPressed: () {Navigator.pushNamed(context, Routes.loginScreen);},
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
