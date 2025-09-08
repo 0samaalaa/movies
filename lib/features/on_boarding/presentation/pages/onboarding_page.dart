@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_routes.dart';
-import 'package:movies/screens/on_boarding/onboarding_info.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/features/on_boarding/presentation/onboarding_info.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/routes/routes.dart';
+import '../cubit/onboarding_cubit.dart';
+
 
 class OnboardingPage extends StatelessWidget {
   final OnboardingInfo item;
@@ -29,7 +32,8 @@ class OnboardingPage extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: ClipRRect(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(40),topLeft: Radius.circular(40)),
+            borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(40), topLeft: Radius.circular(40)),
             child: Container(
               width: double.infinity,
               color: MColors.black,
@@ -59,7 +63,6 @@ class OnboardingPage extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(height: 20),
-
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -70,10 +73,10 @@ class OnboardingPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (isLastPage) {
-                          Navigator.pushReplacementNamed(
-                              context, APPROUTES.loginScreen);
+                          context.read<OnboardingCubit>().completeOnboarding();
+                          Navigator.pushReplacementNamed(context, Routes.loginScreen);
                         } else {
                           pageController.nextPage(
                             duration: const Duration(milliseconds: 250),

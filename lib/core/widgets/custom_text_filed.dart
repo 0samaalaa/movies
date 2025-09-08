@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movies/core/app_colors.dart';
+
+import '../resources/app_colors.dart';
+
 
 class CustomTextFiled extends StatefulWidget {
   final Widget? prefix;

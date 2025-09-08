@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_Images.dart';
-import 'package:movies/core/app_colors.dart';
+
+import '../resources/app_Images.dart';
+import '../resources/app_colors.dart';
+
 
 class AvatarPicker extends StatefulWidget {
   const AvatarPicker({Key? key}) : super(key: key);

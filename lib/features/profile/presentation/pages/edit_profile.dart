@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/app_Images.dart';
-import 'package:movies/core/app_colors.dart';
-import 'package:movies/core/app_icons.dart';
-import 'package:movies/core/app_routes.dart';
-import 'package:movies/core/custom_text_filed.dart';
+import '../../../../core/resources/app_Images.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
+import '../../../../core/widgets/custom_text_filed.dart';
+
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -71,7 +72,7 @@ class EditProfileScreen extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, APPROUTES.forgetPasswordScreen);
+                  Navigator.pushNamed(context, Routes.forgetPasswordScreen);
                 },
                 child: const Text(
                   "Forget Password ?",
@@ -97,7 +98,7 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, APPROUTES.loginScreen);
+                      Navigator.pushNamed(context, Routes.loginScreen);
                     },
                     child: const Text(
                       "Delete Account",
@@ -120,7 +121,7 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, APPROUTES.updateProfileScreen);
+                      Navigator.pushNamed(context, Routes.updateProfileScreen);
                     },
                     child: const Text(
                       "Update Data",
