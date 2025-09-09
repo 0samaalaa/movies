@@ -136,17 +136,15 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              Center(
+              Directionality(
+                textDirection: TextDirection.ltr,
                 child: AnimatedToggleSwitch<String>.rolling(
-                  current: _lang,
+                  current: Localizations.localeOf(context).languageCode,
                   values: const ["en", "ar"],
                   height: 43,
                   indicatorSize: const Size(43, 43),
                   spacing: 20,
                   onChanged: (newLang) {
-                    setState(() => _lang = newLang);
-
-                    // نغير اللغة ونخزنها
                     final newLocale = Locale(newLang);
                     MoviesApp.of(context)?.setLocale(newLocale);
                   },
@@ -172,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                     indicatorBorder: Border.all(color: MColors.yellow, width: 4),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
