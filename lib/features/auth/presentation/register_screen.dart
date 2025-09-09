@@ -175,15 +175,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            Center(
+            Directionality(
+              textDirection: TextDirection.ltr,
               child: AnimatedToggleSwitch<String>.rolling(
-                current: _lang,
+                current: Localizations.localeOf(context).languageCode,
                 values: const ["en", "ar"],
                 height: 43,
                 indicatorSize: const Size(43, 43),
                 spacing: 20,
                 onChanged: (newLang) {
-                  setState(() => _lang = newLang);
                   final newLocale = Locale(newLang);
                   MoviesApp.of(context)?.setLocale(newLocale);
                 },
@@ -197,10 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : null,
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        flag,
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.asset(flag, fit: BoxFit.cover),
                     ),
                   );
                 },
@@ -212,7 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   indicatorBorder: Border.all(color: MColors.yellow, width: 4),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
