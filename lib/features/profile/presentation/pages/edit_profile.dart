@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_Images.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/widgets/custom_text_filed.dart';
 
-
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: MColors.black,
       appBar: AppBar(
@@ -20,9 +22,9 @@ class EditProfileScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: MColors.yellow),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(
+        title: Text(
+          l10n.editProfile,
+          style: const TextStyle(
             color: MColors.yellow,
             fontWeight: FontWeight.bold,
           ),
@@ -74,9 +76,9 @@ class EditProfileScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, Routes.forgetPasswordScreen);
                 },
-                child: const Text(
-                  "Forget Password ?",
-                  style: TextStyle(
+                child: Text(
+                  l10n.forgetPassword,
+                  style: const TextStyle(
                     fontSize: 14,
                     color: MColors.yellow,
                     fontWeight: FontWeight.bold,
@@ -100,9 +102,9 @@ class EditProfileScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.loginScreen);
                     },
-                    child: const Text(
-                      "Delete Account",
-                      style: TextStyle(
+                    child: Text(
+                      l10n.deleteAccount,
+                      style: const TextStyle(
                         color: MColors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -123,9 +125,9 @@ class EditProfileScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.updateProfileScreen);
                     },
-                    child: const Text(
-                      "Update Data",
-                      style: TextStyle(
+                    child: Text(
+                      l10n.updateData,
+                      style: const TextStyle(
                         color: MColors.black,
                         fontWeight: FontWeight.bold,
                       ),

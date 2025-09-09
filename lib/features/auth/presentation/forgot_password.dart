@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/resources/app_Images.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/app_icons.dart';
 import '../../../core/widgets/custom_text_filed.dart';
-
-
 
 class ForgetPasswordScreen extends StatelessWidget {
   const ForgetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Forget Password",
-          style: TextStyle(
+        title: Text(
+          l10n.forgetPassword,
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 22,
           ),
@@ -31,7 +31,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             ),
           ),
           CustomTextFiled(
-            hintText: "Email",
+            hintText: l10n.email,
             prefixIcon: Padding(
               padding: const EdgeInsets.all(10),
               child: Image.asset(
@@ -42,7 +42,6 @@ class ForgetPasswordScreen extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -56,9 +55,9 @@ class ForgetPasswordScreen extends StatelessWidget {
               ),
               onPressed: () {
               },
-              child: const Text(
-                "Reset Password",
-                style: TextStyle(
+              child: Text(
+                l10n.resetPassword,
+                style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,

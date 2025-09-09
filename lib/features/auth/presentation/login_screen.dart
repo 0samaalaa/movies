@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/resources/app_Images.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/app_icons.dart';
 import '../../../core/routes/routes.dart';
 import '../../../core/widgets/custom_text_filed.dart';
-
+import '../../../main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
               CustomTextFiled(
-                hintText: "Email",
+                hintText: l10n.email,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Image.asset(
@@ -56,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
               CustomTextFiled(
-                hintText: "Password",
+                hintText: l10n.password,
                 isPassword: true,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(8),
@@ -75,9 +77,9 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.pushNamed(context, Routes.forgetPasswordScreen);
                   },
-                  child: const Text(
-                    "Forget Password ?",
-                    style: TextStyle(
+                  child: Text(
+                    l10n.forgetPassword,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: MColors.yellow,
                       fontWeight: FontWeight.bold,
@@ -100,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.pushNamed(context, Routes.layoutScreen);
                   },
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
+                  child: Text(
+                    l10n.login,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: MColors.black,
@@ -114,17 +116,17 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Don’t Have Account ?",
-                    style: TextStyle(color: MColors.white, fontSize: 14),
+                  Text(
+                    l10n.dontHaveAccount,
+                    style: const TextStyle(color: MColors.white, fontSize: 14),
                   ),
                   TextButton(
                     onPressed: () {
-                     Navigator.pushNamed(context, Routes.registerScreen);
+                      Navigator.pushNamed(context, Routes.registerScreen);
                     },
-                    child: const Text(
-                      "Create One",
-                      style: TextStyle(
+                    child: Text(
+                      l10n.createOne,
+                      style: const TextStyle(
                         color: MColors.yellow,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -132,59 +134,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                    width: 90,
-                    child: Divider(color: MColors.yellow, thickness: 0.8),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      "  OR  ",
-                      style: TextStyle(color: MColors.yellow, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 90,
-                    child: Divider(color: MColors.yellow, thickness: 0.8),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MColors.yellow,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                   Navigator.pushNamed(context, Routes.layoutScreen);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(MIcons.google, height: 22, width: 22),
-                      const SizedBox(width: 12),
-                      const Text(
-                        "Login With Google",
-                        style: TextStyle(
-                          color: MColors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               const SizedBox(height: 20),
               Center(
@@ -194,7 +143,13 @@ class _LoginPageState extends State<LoginPage> {
                   height: 43,
                   indicatorSize: const Size(43, 43),
                   spacing: 20,
-                  onChanged: (i) => setState(() => _lang = i),
+                  onChanged: (newLang) {
+                    setState(() => _lang = newLang);
+
+                    // نغير اللغة ونخزنها
+                    final newLocale = Locale(newLang);
+                    MoviesApp.of(context)?.setLocale(newLocale);
+                  },
                   iconBuilder: (value, foreground) {
                     final flag = value == "en" ? MIcons.en : MIcons.arabic;
                     return Container(
@@ -205,10 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                             : null,
                       ),
                       child: ClipOval(
-                        child: Image.asset(
-                          flag,
-                          fit: BoxFit.cover,
-                        ),
+                        child: Image.asset(flag, fit: BoxFit.cover),
                       ),
                     );
                   },

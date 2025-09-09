@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_Images.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
 import '../../../../core/routes/routes.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,10 +17,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: MColors.black,
-      body:
-      Column(
+      body: Column(
         children: [
           Container(
             color: MColors.dgrey,
@@ -53,11 +53,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(width: 50),
-                          // Watch List count
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "12",
                                 style: TextStyle(
                                   fontSize: 36,
@@ -65,10 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
-                                "Watch List",
-                                style: TextStyle(
+                                l10n.watchList,
+                                style: const TextStyle(
                                   color: MColors.white,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -79,8 +78,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(width: 24),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "10",
                                 style: TextStyle(
                                   fontSize: 36,
@@ -88,10 +87,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
-                                "History",
-                                style: TextStyle(
+                                l10n.history,
+                                style: const TextStyle(
                                   color: MColors.white,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -113,11 +112,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
                               ),
-                              onPressed: () {Navigator.pushNamed(context, Routes.editProfileScreen);},
-                              child: const Text("Edit Profile",
-                                  style: TextStyle(
-                                      color: MColors.black,
-                                      fontWeight: FontWeight.w500)),
+                              onPressed: () {
+                                Navigator.pushNamed(context, Routes.editProfileScreen);
+                              },
+                              child: Text(
+                                l10n.editProfile,
+                                style: const TextStyle(
+                                  color: MColors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -131,13 +135,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              onPressed: () {Navigator.pushNamed(context, Routes.loginScreen);},
+                              onPressed: () {
+                                Navigator.pushNamed(context, Routes.onboardingScreen);
+                              },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    "Exit",
-                                    style: TextStyle(
+                                  Text(
+                                    l10n.exit,
+                                    style: const TextStyle(
                                       color: MColors.white,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -161,14 +167,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: _buildTabItem(0, MIcons.items, "Watch List")),
-                    Expanded(child: _buildTabItem(1, MIcons.folder, "History")),
+                    Expanded(child: _buildTabItem(0, MIcons.items, l10n.watchList)),
+                    Expanded(child: _buildTabItem(1, MIcons.folder, l10n.history)),
                   ],
                 ),
               ],
             ),
           ),
-
           Expanded(
             child: Center(
               child: Image.asset(

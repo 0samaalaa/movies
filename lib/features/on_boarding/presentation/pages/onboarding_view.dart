@@ -13,7 +13,6 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  final controller = OnboardingItems();
   final PageController pageController = PageController();
 
   @override
@@ -24,16 +23,18 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
+    final items = OnboardingItems.getItems(context);
+
     return Scaffold(
       backgroundColor: MColors.black,
       body: PageView.builder(
         controller: pageController,
-        itemCount: controller.items.length,
+        itemCount: items.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          final item = controller.items[index];
+          final item = items[index];
           final isFirst = index == 0;
-          final isLast = index == controller.items.length - 1;
+          final isLast = index == items.length - 1;
 
           return OnboardingPage(
             item: item,
