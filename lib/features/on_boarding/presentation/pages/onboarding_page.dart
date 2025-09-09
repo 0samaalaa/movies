@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/features/on_boarding/presentation/onboarding_info.dart';
+import 'package:movies/core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/routes/routes.dart';
 import '../cubit/onboarding_cubit.dart';
-
 
 class OnboardingPage extends StatelessWidget {
   final OnboardingInfo item;
@@ -24,6 +24,7 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Stack(
       children: [
         Positioned.fill(
@@ -33,7 +34,9 @@ class OnboardingPage extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(40), topLeft: Radius.circular(40)),
+              topRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+            ),
             child: Container(
               width: double.infinity,
               color: MColors.black,
@@ -76,7 +79,8 @@ class OnboardingPage extends StatelessWidget {
                       onPressed: () async {
                         if (isLastPage) {
                           context.read<OnboardingCubit>().completeOnboarding();
-                          Navigator.pushReplacementNamed(context, Routes.loginScreen);
+                          Navigator.pushReplacementNamed(
+                              context, Routes.loginScreen);
                         } else {
                           pageController.nextPage(
                             duration: const Duration(milliseconds: 250),
@@ -86,8 +90,8 @@ class OnboardingPage extends StatelessWidget {
                       },
                       child: Text(
                         isFirstPage
-                            ? "Explore Now"
-                            : (isLastPage ? "Finish" : "Next"),
+                            ? l10n.exploreNow
+                            : (isLastPage ? l10n.finish : l10n.next),
                         style: const TextStyle(
                           color: MColors.black,
                           fontWeight: FontWeight.bold,
@@ -102,7 +106,8 @@ class OnboardingPage extends StatelessWidget {
                       width: double.infinity,
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: MColors.yellow, width: 2),
+                          side: const BorderSide(
+                              color: MColors.yellow, width: 2),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -115,8 +120,8 @@ class OnboardingPage extends StatelessWidget {
                           );
                         },
                         child: Text(
-                          "Back",
-                          style: TextStyle(
+                          l10n.back,
+                          style: const TextStyle(
                             color: MColors.yellow,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

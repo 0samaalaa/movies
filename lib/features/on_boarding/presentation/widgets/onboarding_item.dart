@@ -1,42 +1,42 @@
-
 import 'package:movies/features/on_boarding/presentation/onboarding_info.dart';
+import 'package:flutter/material.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class OnboardingItems {
-  List<OnboardingInfo> items = [
-    OnboardingInfo(
-      image: "assets/images/ON1.png",
-      title: "Find Your Next\nFavorite Movie Here",
-      description:
-      "Get access to a huge library of movies to suit all tastes. You will surely like it.",
-    ),
-    OnboardingInfo(
-      image: "assets/images/ON2.png",
-      title: "Discover Movies",
-      description:
-      "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
-    ),
-    OnboardingInfo(
-      image: "assets/images/ON3.png",
-      title: "Explore All Genres",
-      description:
-      "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-    ),
-    OnboardingInfo(
-      image: "assets/images/ON4.png",
-      title: "Create Watchlists",
-      description:
-      "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
-    ),
-    OnboardingInfo(
-      image: "assets/images/ON5.png",
-      title: "Rate, Review, and Learn",
-      description:
-      "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
-    ),
-    OnboardingInfo(
-      image: "assets/images/ON6.png",
-      title: "Start Watching Now",
-      description: "",
-    ),
-  ];
+  static List<OnboardingInfo> getItems(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return [
+      OnboardingInfo(
+        image: "assets/images/ON1.png",
+        title: l10n.onboardingTitle1,
+        description: l10n.onboardingDesc1,
+      ),
+      OnboardingInfo(
+        image: "assets/images/ON2.png",
+        title: l10n.onboardingTitle2,
+        description: l10n.onboardingDesc2,
+      ),
+      OnboardingInfo(
+        image: "assets/images/ON3.png",
+        title: l10n.onboardingTitle3,
+        description: l10n.onboardingDesc3,
+      ),
+      OnboardingInfo(
+        image: "assets/images/ON4.png",
+        title: l10n.onboardingTitle4,
+        description: l10n.onboardingDesc4,
+      ),
+      OnboardingInfo(
+        image: "assets/images/ON5.png",
+        title: l10n.onboardingTitle5,
+        description: l10n.onboardingDesc5,
+      ),
+      OnboardingInfo(
+        image: "assets/images/ON6.png",
+        title: l10n.onboardingTitle6,
+        description: l10n.onboardingDesc6,
+      ),
+    ];
+  }
 }

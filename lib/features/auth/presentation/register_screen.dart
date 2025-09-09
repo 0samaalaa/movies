@@ -1,12 +1,12 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/app_icons.dart';
 import '../../../core/routes/routes.dart';
 import '../../../core/widgets/avatar_picker.dart';
 import '../../../core/widgets/custom_text_filed.dart';
-
-
+import '../../../main.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,12 +19,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+  TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
   String _lang = "en";
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _lang = Localizations.localeOf(context).languageCode;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MColors.black,
@@ -33,9 +43,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           icon: const Icon(Icons.arrow_back, color: MColors.yellow),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Register",
-          style: TextStyle(
+        title: Text(
+          l10n.register,
+          style: const TextStyle(
             color: MColors.yellow,
             fontWeight: FontWeight.bold,
           ),
@@ -49,13 +59,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 10),
             const AvatarPicker(),
             const SizedBox(height: 5),
-            const Text(
-              "Avatar",
-              style: TextStyle(color: MColors.white, fontSize: 16),
+            Text(
+              l10n.avatar,
+              style: const TextStyle(color: MColors.white, fontSize: 16),
             ),
             const SizedBox(height: 25),
             CustomTextFiled(
-              hintText: "Name",
+              hintText: l10n.name,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Image.asset(
@@ -68,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
-              hintText: "Email",
+              hintText: l10n.email,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Image.asset(
@@ -81,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
-              hintText: "Password",
+              hintText: l10n.password,
               isPassword: true,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
@@ -95,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
-              hintText: "Confirm Password",
+              hintText: l10n.confirmPassword,
               isPassword: true,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
@@ -109,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
-              hintText: "Phone Number",
+              hintText: l10n.phoneNumber,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Image.asset(
@@ -132,9 +142,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 onPressed: () {},
-                child: const Text(
-                  "Create Account",
-                  style: TextStyle(
+                child: Text(
+                  l10n.createAccount,
+                  style: const TextStyle(
                     color: MColors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -146,17 +156,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Already Have Account ? ",
-                  style: TextStyle(color: MColors.white),
+                Text(
+                  l10n.alreadyHaveAccount,
+                  style: const TextStyle(color: MColors.white),
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, Routes.loginScreen);
                   },
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
+                  child: Text(
+                    l10n.login,
+                    style: const TextStyle(
                       color: MColors.yellow,
                       fontWeight: FontWeight.bold,
                     ),
@@ -172,7 +182,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 43,
                 indicatorSize: const Size(43, 43),
                 spacing: 20,
-                onChanged: (i) => setState(() => _lang = i),
+                onChanged: (newLang) {
+                  setState(() => _lang = newLang);
+                  final newLocale = Locale(newLang);
+                  MoviesApp.of(context)?.setLocale(newLocale);
+                },
                 iconBuilder: (value, foreground) {
                   final flag = value == "en" ? MIcons.en : MIcons.arabic;
                   return Container(
