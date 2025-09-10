@@ -1,12 +1,14 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
-import '../../../core/localization/app_localizations.dart';
-import '../../../core/resources/app_colors.dart';
-import '../../../core/resources/app_icons.dart';
-import '../../../core/routes/routes.dart';
-import '../../../core/widgets/avatar_picker.dart';
-import '../../../core/widgets/custom_text_filed.dart';
-import '../../../main.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
+import '../../../../core/widgets/avatar_picker.dart';
+import '../../../../core/widgets/custom_text_filed.dart';
+import '../../../../main.dart';
+import '../../data/repositories/auth_repository.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,16 +21,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-  TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+  int _selectedAvatarId = 1;
   String _lang = "en";
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _lang = Localizations.localeOf(context).languageCode;
+  }
+
+  void showAwesomeSnackBar(BuildContext context, String title, String message, ContentType type) {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: type,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   @override
@@ -57,7 +76,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            const AvatarPicker(),
+            AvatarPicker(
+              onAvatarSelected: (id) {
+                _selectedAvatarId = id;
+              },
+            ),
             const SizedBox(height: 5),
             Text(
               l10n.avatar,
@@ -65,6 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 25),
             CustomTextFiled(
+              controller: nameController,
               hintText: l10n.name,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
@@ -78,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
+              controller: emailController,
               hintText: l10n.email,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
@@ -91,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
+              controller: passwordController,
               hintText: l10n.password,
               isPassword: true,
               prefixIcon: Padding(
@@ -105,6 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
+              controller: confirmPasswordController,
               hintText: l10n.confirmPassword,
               isPassword: true,
               prefixIcon: Padding(
@@ -119,6 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
             CustomTextFiled(
+              controller: phoneController,
               hintText: l10n.phoneNumber,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10),
@@ -141,7 +169,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  if (passwordController.text != confirmPasswordController.text) {
+                    showAwesomeSnackBar(context, "Error", "Passwords do not match", ContentType.failure);
+                    return;
+                  }
+                  try {
+                    final message = await AuthRepository().registerUser(
+                      name: nameController.text,
+                      email: emailController.text.trim().toLowerCase(),
+                      password: passwordController.text,
+                      confirmPassword: confirmPasswordController.text,
+                      phone: phoneController.text,
+                      avatarId: _selectedAvatarId,
+                    );
+                    showAwesomeSnackBar(context, "Success", message, ContentType.success);
+                    Navigator.pushNamed(context, Routes.loginScreen);
+                  } catch (e) {
+                    showAwesomeSnackBar(context, "Error", e.toString(), ContentType.failure);
+                  }
+                },
                 child: Text(
                   l10n.createAccount,
                   style: const TextStyle(

@@ -6,9 +6,10 @@ import '../../../../../core/resources/app_colors.dart';
 import '../../../../../core/resources/app_icons.dart';
 import '../../../../../core/widgets/custom_text_filed.dart';
 import '../../../../core/resources/app_Images.dart';
-import '../../profile/presentation/bloc/profile_bloc.dart';
-import '../../profile/presentation/bloc/profile_event.dart';
-import '../../profile/presentation/bloc/profile_state.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/bloc/profile_event.dart';
+import '../../../profile/presentation/bloc/profile_state.dart';
+
 
 
 class ResetPasswordScreen extends StatefulWidget {

@@ -4,9 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/app_bloc_observer.dart';
 import 'core/localization/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'core/app_bloc_observer.dart';
-import 'core/localization/app_localizations.dart';
 import 'core/resources/app_colors.dart';
 import 'core/routes/route_generator.dart';
 import 'core/routes/routes.dart';
@@ -17,7 +14,10 @@ import 'features/home/domain/usecases/get_movies.dart';
 import 'features/home/presentation/bloc/movie_bloc.dart';
 import 'features/home/presentation/bloc/movie_event.dart';
 import 'features/on_boarding/presentation/cubit/onboarding_cubit.dart';
-import 'features/on_boarding/presentation/cubit/onboarding_cubit.dart';
+import 'features/profile/data/datasources/profile_remote_datasource.dart';
+import 'features/profile/data/repositories/profile_repository_impl.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
+import 'features/profile/presentation/bloc/profile_event.dart';
 
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -29,19 +29,7 @@ Future<void> main() async {
 
   final hasSeenOnboarding = preferencesHelper.hasSeenOnboarding;
   final savedLang = preferencesHelper.languageCode;
-  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  Bloc.observer = AppBlocObserver();
-
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final prefs = await SharedPreferences.getInstance();
-  final preferencesHelper = PreferencesHelper(prefs);
-
-  final hasSeenOnboarding = preferencesHelper.hasSeenOnboarding;
-  final savedLang = preferencesHelper.languageCode;
   final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   Bloc.observer = AppBlocObserver();
@@ -84,43 +72,6 @@ class MoviesApp extends StatefulWidget {
     required this.isLoggedIn,
   }) : super(key: key);
 
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => OnboardingCubit(preferencesHelper),
-        ),
-        BlocProvider(
-          create: (_) => MovieBloc(
-            GetMovies(
-              MovieRepositoryImpl(MovieRemoteDatasource()),
-            ),
-          )..add(LoadMoviesEvent()),
-        ),
-      ],
-      child: MoviesApp(
-        hasSeenOnboarding: hasSeenOnboarding,
-        preferencesHelper: preferencesHelper,
-        initialLocale: Locale(savedLang),
-        isLoggedIn: isLoggedIn,
-      ),
-    ),
-  );
-}
-
-class MoviesApp extends StatefulWidget {
-  final bool hasSeenOnboarding;
-  final PreferencesHelper preferencesHelper;
-  final Locale initialLocale;
-  final bool isLoggedIn;
-
-  const MoviesApp({
-    Key? key,
-    required this.hasSeenOnboarding,
-    required this.preferencesHelper,
-    required this.initialLocale,
-    required this.isLoggedIn,
-  }) : super(key: key);
   @override
   State<MoviesApp> createState() => _MoviesAppState();
 
@@ -167,8 +118,6 @@ class _MoviesAppState extends State<MoviesApp> {
         ),
       ),
       initialRoute: initialRoute,
-      initialRoute:
-      widget.hasSeenOnboarding ? Routes.loginScreen : Routes.onboardingScreen,
       onGenerateRoute: RouteGenerator.getRoute,
       localizationsDelegates: const [
         AppLocalizations.delegate,
