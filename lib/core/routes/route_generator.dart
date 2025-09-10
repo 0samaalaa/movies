@@ -4,9 +4,9 @@ import 'package:movies/features/home/presentation/pages/layout_screen.dart';
 import 'package:movies/features/profile/presentation/pages/profile_screen.dart';
 import 'package:movies/features/profile/presentation/pages/edit_profile.dart';
 import 'package:movies/features/profile/presentation/pages/update_data.dart';
-import '../../features/auth/presentation/forgot_password.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/reset_password.dart';
 import '../../features/on_boarding/presentation/pages/onboarding_view.dart';
 
 class RouteGenerator {
@@ -18,8 +18,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case Routes.registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
-      case Routes.forgetPasswordScreen:
-        return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
+      case Routes.resetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
       case Routes.layoutScreen:
         return MaterialPageRoute(builder: (_) => const LayoutScreen());
       case Routes.profileScreen:

@@ -74,7 +74,7 @@ class EditProfileScreen extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, Routes.forgetPasswordScreen);
+                  Navigator.pushNamed(context, Routes.resetPasswordScreen);
                 },
                 child: Text(
                   l10n.forgetPassword,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
-import '../../../browse/presentation/pages/browse_screen.dart';
+import '../../../browse/browse/presentation/pages/browse_screen.dart';
 import '../../../profile/presentation/pages/profile_screen.dart';
 import '../../../search/presentation/pages/search_screen.dart';
 import 'home_screen.dart';
