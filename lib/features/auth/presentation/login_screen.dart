@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, Routes.forgetPasswordScreen);
+                    Navigator.pushNamed(context, Routes.resetPasswordScreen);
                   },
                   child: Text(
                     l10n.forgetPassword,
