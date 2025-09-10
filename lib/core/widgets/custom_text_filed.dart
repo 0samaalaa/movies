@@ -14,6 +14,7 @@ class CustomTextFiled extends StatefulWidget {
   final bool isPassword;
   final int? maxLines;
   final bool readOnly;
+  final bool obscureText;
 
 
   const CustomTextFiled({
@@ -27,6 +28,8 @@ class CustomTextFiled extends StatefulWidget {
     this.maxLines,
     this.isPassword = false,
     this.readOnly =false,
+    this.obscureText = false,
+
 
   });
 

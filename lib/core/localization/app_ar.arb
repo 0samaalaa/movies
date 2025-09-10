@@ -16,7 +16,9 @@
   "password": "كلمة المرور",
   "forgetPassword": "هل نسيت كلمة المرور؟",
   "login": "تسجيل الدخول",
+  "register": "تسجيل حساب جديد",
   "dontHaveAccount": "ليس لديك حساب؟",
+  "deleteAccount": "حذف الحساب",
   "createOne": "أنشئ حساب",
   "or": "أو",
   "loginWithGoogle": "تسجيل الدخول عبر جوجل",
@@ -33,6 +35,7 @@
   "resetPassword": "إعادة تعيين كلمة المرور",
   "updateData": "تحديث البيانات",
   "pickAvatar": "اختر صورة شخصية",
+  "avatar": "صورة شخصية",
   "exit": "خروج",
   "editProfile": "تعديل الملف الشخصي",
   "watchList": "قائمة المشاهدة",
@@ -46,5 +49,21 @@
   "fantasy": "فانتازيا",
   "horror": "رعب",
   "animation": "رسوم متحركة",
-  "biography": "سيرة ذاتية"
+  "biography": "سيرة ذاتية",
+  "drama": "دراما",
+  "comedy": "كوميدي",
+  "romance": "رومانسي",
+  "thriller": "إثارة وتشويق",
+  "mystery": "غموض",
+  "music": "موسيقى"
+  "exploreNow": "استكشف الآن",
+  "finish": "إنهاء",
+  "crime": "جريمة",
+"areYouSureDelete": "هل أنت متأكد أنك تريد الحذف؟",
+"cancel": "إلغاء",
+"confirm": "تأكيد",
+"oldPassword": "كلمة المرور القديمة",
+"newPassword": "كلمة المرور الجديدة"
+
+
 }

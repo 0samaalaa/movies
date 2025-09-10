@@ -16,7 +16,9 @@
   "password": "Password",
   "forgetPassword": "Forget Password ?",
   "login": "Login",
+  "register": "Register",
   "dontHaveAccount": "Don’t Have Account ?",
+  "deleteAccount": "Delete Account",
   "createOne": "Create One",
   "or": "OR",
   "loginWithGoogle": "Login With Google",
@@ -33,6 +35,7 @@
   "resetPassword": "Reset Password",
   "updateData": "Update Data",
   "pickAvatar": "Pick Avatar",
+  "avatar": "Avatar",
   "exit": "Exit",
   "editProfile": "Edit Profile",
   "watchList": "Watch List",
@@ -46,6 +49,22 @@
   "fantasy": "Fantasy",
   "horror": "Horror",
   "animation": "Animation",
-  "biography": "Biography"
+  "biography": "Biography",
+  "drama": "Drama",
+  "comedy": "Comedy",
+  "romance": "Romance",
+  "thriller": "Thriller",
+  "mystery": "Mystery",
+  "music": "Music"
+  "exploreNow": "Explore Now",
+  "finish": "Finish",
+  "crime": "Crime",
+  "areYouSureDelete": "Are you sure you want to delete?",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+   "oldPassword": "Old Password",
+   "newPassword": "New Password"
+
+
 
 }

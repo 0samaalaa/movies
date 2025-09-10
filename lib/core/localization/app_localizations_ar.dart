@@ -1,11 +1,8 @@
-// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations.dart';
 
-// ignore_for_file: type=lint
 
-/// The translations for Arabic (`ar`).
 class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
@@ -64,7 +61,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get password => 'كلمة المرور';
 
   @override
-  String get forgetPassword => 'هل نسيت كلمة المرور؟';
+  String get forgetPassword => 'هل نسيت كلمة المرور ؟';
 
   @override
   String get login => 'تسجيل الدخول';
@@ -76,7 +73,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deleteAccount => 'حذف الحساب';
 
   @override
-  String get dontHaveAccount => 'ليس لديك حساب؟';
+  String get dontHaveAccount => 'ليس لديك حساب ؟';
 
   @override
   String get createOne => 'أنشئ حساب';
@@ -100,7 +97,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get createAccount => 'إنشاء حساب';
 
   @override
-  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+  String get alreadyHaveAccount => 'لديك حساب بالفعل ؟  ';
 
   @override
   String get verifyEmail => 'تأكيد البريد الإلكتروني';
@@ -170,4 +167,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get biography => 'سيرة ذاتية';
+
+  @override
+  String get drama => 'دراما';
+
+  @override
+  String get comedy => 'كوميدي';
+
+  @override
+  String get crime => 'جريمة';
+
+  @override
+  String get romance => 'رومانسي';
+
+  @override
+  String get thriller => 'إثارة';
+
+  @override
+  String get mystery => 'غموض';
+
+  @override
+  String get music => 'موسيقى';
+
+  @override
+  String get areYouSureDelete => 'هل أنت متأكد أنك تريد الحذف؟';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get oldPassword => 'كلمة المرور القديمة';
+
+
+
+
+
+
+
 }

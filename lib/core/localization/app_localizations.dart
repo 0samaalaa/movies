@@ -416,6 +416,53 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Biography'**
   String get biography;
+
+
+  /// No description provided for @biography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get drama;
+
+  /// No description provided for @biography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get comedy;
+
+  /// No description provided for @crime.
+  /// In en, this message translates to:
+  /// **'Crime'**
+  String get crime;
+
+  /// No description provided for @romance.
+  /// In en, this message translates to:
+  /// **'Romance'**
+  String get romance;
+
+
+  /// No description provided for @thriller.
+  /// In en, this message translates to:
+  /// **'Thriller'**
+  String get thriller;
+
+  /// No description provided for @mystery.
+  /// In en, this message translates to:
+  /// **'Mystery'**
+  String get mystery;
+
+  /// No description provided for @music.
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get music;
+
+  String get areYouSureDelete;
+  String get cancel;
+  String get confirm;
+  String get newPassword;
+  String get oldPassword;
+
+
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

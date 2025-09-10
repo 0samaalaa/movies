@@ -99,7 +99,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
-  String get alreadyHaveAccount => 'Already Have Account ?';
+  String get alreadyHaveAccount => 'Already Have Account ?  ';
 
   @override
   String get verifyEmail => 'Verify Email';
@@ -168,4 +168,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get biography => 'Biography';
+
+  @override
+  String get drama => 'Drama';
+
+  @override
+  String get comedy => 'Comedy';
+
+  @override
+  String get crime => 'Crime';
+
+  @override
+  String get romance => 'Romance';
+
+  @override
+  String get thriller => 'Thriller';
+
+  @override
+  String get mystery => 'Mystery';
+
+  @override
+  String get music => 'Music';
+
+  @override
+  String get areYouSureDelete => 'Are you sure you want to delete?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get oldPassword => 'Old Password';
+
+
+
 }
