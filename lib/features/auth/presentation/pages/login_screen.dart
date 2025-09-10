@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import '../../../core/localization/app_localizations.dart';
-import '../../../core/resources/app_Images.dart';
-import '../../../core/resources/app_colors.dart';
-import '../../../core/resources/app_icons.dart';
-import '../../../core/routes/routes.dart';
-import '../../../core/widgets/custom_text_filed.dart';
-import '../../../main.dart';
+import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/resources/app_Images.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
+import '../../../../core/widgets/custom_text_filed.dart';
+import '../../../../main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

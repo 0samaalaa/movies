@@ -4,9 +4,9 @@ import 'package:movies/features/home/presentation/pages/layout_screen.dart';
 import 'package:movies/features/profile/presentation/pages/profile_screen.dart';
 import 'package:movies/features/profile/presentation/pages/edit_profile.dart';
 import 'package:movies/features/profile/presentation/pages/update_data.dart';
-import '../../features/auth/presentation/login_screen.dart';
-import '../../features/auth/presentation/register_screen.dart';
-import '../../features/auth/presentation/reset_password.dart';
+import '../../features/auth/presentation/pages/login_screen.dart';
+import '../../features/auth/presentation/pages/register_screen.dart';
+import '../../features/auth/presentation/pages/reset_password.dart';
 import '../../features/on_boarding/presentation/pages/onboarding_view.dart';
 
 class RouteGenerator {
