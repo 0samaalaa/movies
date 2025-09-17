@@ -4,8 +4,9 @@ class MovieModel extends Movie {
   MovieModel({
     required super.id,
     required super.title,
-    required super.backgroundImage,
-    required super.posterImage,
+    required super.smallCoverImage,
+    required super.mediumCoverImage,
+    required super.largeCoverImage,
     required super.rating,
     required super.genres,
   });
@@ -14,9 +15,12 @@ class MovieModel extends Movie {
     return MovieModel(
       id: json["id"],
       title: json["title"],
-      backgroundImage: json["background_image"] ?? '',
-      posterImage: json["medium_cover_image"] ?? '',
-      rating: (json["rating"] is int) ? (json["rating"] as int).toDouble() : (json["rating"] ?? 0.0),
+      smallCoverImage: json["small_cover_image"] ?? '',
+      mediumCoverImage: json["medium_cover_image"] ?? '',
+      largeCoverImage: json["large_cover_image"] ?? '',
+      rating: (json["rating"] is int)
+          ? (json["rating"] as int).toDouble()
+          : (json["rating"] ?? 0.0),
       genres: List<String>.from(json["genres"] ?? []),
     );
   }

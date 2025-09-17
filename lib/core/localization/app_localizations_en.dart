@@ -205,6 +205,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get oldPassword => 'Old Password';
 
+  @override
+  String get screenshots => 'Screenshots';
+
+  @override
+  String get noScreenshots => 'No Screenshots Available';
+
+  @override
+  String get similar => 'Similar';
+
+  @override
+  String get noCast => 'No Cast data available';
+
+  @override
+  String get noGenres => 'No genres available';
+
+
+
 
 
 }

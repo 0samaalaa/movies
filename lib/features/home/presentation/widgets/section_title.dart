@@ -1,4 +1,3 @@
-// section_title.dart
 import 'package:flutter/material.dart';
 import '../../../../core/resources/app_Images.dart';
 
