@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
 import '../../../home/presentation/bloc/movie_bloc.dart';
 import '../../../home/presentation/bloc/movie_event.dart';
 import '../../../home/presentation/bloc/movie_state.dart';
@@ -94,7 +95,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     return const Center(
                       child: Text(
                         "No movies found",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: MColors.white),
                       ),
                     );
                   }
@@ -110,65 +111,72 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       ),
                       itemBuilder: (context, idx) {
                         final movie = movies[idx];
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(18),
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: Image.network(
-                                  movie.posterImage,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(color: Colors.grey[900]),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.movieDetailsScreen,
+                              arguments: {'movieId': movie.id},
+                            );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(18),
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Image.network(
+                                    movie.poster,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        Container(color: MColors.dgrey),
+                                  ),
                                 ),
-                              ),
-                              Positioned.fill(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black.withOpacity(0.7),
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 8,
+                                  left: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: MColors.black,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          MIcons.star,
+                                          width: 14,
+                                          height: 14,
+                                          color: MColors.yellow,
+                                        ),
+                                        const SizedBox(width: 3),
+                                        Text(
+                                          "${movie.rating}",
+                                          style: const TextStyle(
+                                            color: MColors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                left: 8,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.75),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        MIcons.star,
-                                        width: 14,
-                                        height: 14,
-                                        color: MColors.yellow,
-                                      ),
-                                      const SizedBox(width: 3),
-                                      Text(
-                                        "${movie.rating}",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -178,7 +186,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   return Center(
                     child: Text(
                       state.message,
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(color: MColors.red),
                     ),
                   );
                 }

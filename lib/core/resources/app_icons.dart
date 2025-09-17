@@ -18,4 +18,10 @@ class MIcons {
   static const String star = "assets/icons/star.png";
   static const String time = "assets/icons/time.png";
   static const String folder = "assets/icons/folder.png";
+  static const String back = "assets/icons/back.png";
+  static const String backr = "assets/icons/backr.png";
+  static const String play = "assets/icons/play.png";
+  static const String save = "assets/icons/save.png";
+  static const String saved = "assets/icons/saved.png";
+
 }

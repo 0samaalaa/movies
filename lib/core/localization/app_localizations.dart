@@ -461,6 +461,15 @@ abstract class AppLocalizations {
   String get confirm;
   String get newPassword;
   String get oldPassword;
+  String get screenshots;
+  String get noScreenshots;
+  String get similar;
+  String get noCast;
+  String get noGenres;
+
+
+
+
 
 
 }
