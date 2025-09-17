@@ -3,6 +3,7 @@ import 'package:movies/features/home/presentation/widgets/section_title.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
+import '../../../../core/routes/routes.dart';
 import '../../domain/entities/movie.dart';
 import 'movie_card.dart';
 
@@ -62,13 +63,14 @@ class _MovieCarouselState extends State<MovieCarousel> {
     final genres = widget.movies
         .expand((movie) => movie.genres)
         .toSet()
-        .toList();
+        .toList()
+      ..sort();
 
     return Stack(
       children: [
         Positioned.fill(
           child: Image.network(
-            widget.movies[selectedIndex].posterImage,
+            widget.movies[selectedIndex].poster,
             fit: BoxFit.fill,
             alignment: Alignment.topCenter,
           ),
@@ -90,9 +92,18 @@ class _MovieCarouselState extends State<MovieCarousel> {
                   controller: pageController,
                   itemCount: widget.movies.length,
                   onPageChanged: (idx) => setState(() => selectedIndex = idx),
-                  itemBuilder: (context, idx) => MovieCard(
-                    movie: widget.movies[idx],
-                    isSelected: idx == selectedIndex,
+                  itemBuilder: (context, idx) => GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.movieDetailsScreen,
+                        arguments: {'movieId': widget.movies[idx].id},
+                      );
+                    },
+                    child: MovieCard(
+                      movie: widget.movies[idx],
+                      isSelected: idx == selectedIndex,
+                    ),
                   ),
                 ),
               ),
@@ -117,7 +128,7 @@ class _MovieCarouselState extends State<MovieCarousel> {
                           Text(
                             _getTranslatedGenre(context, genre),
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: MColors.white,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -156,22 +167,30 @@ class _MovieCarouselState extends State<MovieCarousel> {
                     SizedBox(
                       height: 150,
                       child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        itemCount: genreMovies.length,
-                        itemBuilder: (context, i) => Padding(
-                          padding: const EdgeInsets.only(right: 18),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: AspectRatio(
-                              aspectRatio: 0.70,
-                              child: Stack(
-                                children: [
-                                  Image.network(
-                                    genreMovies[i].posterImage,
-                                    fit: BoxFit.cover,
-                                    width: 107,
-                                  ),
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                itemCount: genreMovies.length,
+                itemBuilder: (context, i) => GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.movieDetailsScreen,
+                    arguments: {'movieId': genreMovies[i].id},
+                  );
+                },
+                child: Padding(
+                padding: const EdgeInsets.only(right: 18),
+                child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: AspectRatio(
+                aspectRatio: 0.70,
+                child: Stack(
+                children: [
+                Image.network(
+                genreMovies[i].poster,
+                fit: BoxFit.cover,
+                width: 107,
+                ),
                                   Positioned(
                                     top: 10,
                                     left: 10,
@@ -209,7 +228,7 @@ class _MovieCarouselState extends State<MovieCarousel> {
                           ),
                         ),
                       ),
-                    ),
+                    ), ),
                     const SizedBox(height: 20),
                   ],
                 );

@@ -207,6 +207,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get oldPassword => 'كلمة المرور القديمة';
 
+  @override
+  String get screenshots => 'لقطات الشاشة';
+
+  @override
+  String get noScreenshots => 'لا توجد لقطات شاشة متاحة';
+
+  @override
+  String get similar => 'مشابه';
+
+  @override
+  String get noCast => 'لا يوجد طاقم متاح';
+
+  @override
+  String get noGenres => 'لا توجد أنواع متاحة';
+
+
+
+
+
 
 
 

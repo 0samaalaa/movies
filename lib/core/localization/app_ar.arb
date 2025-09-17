@@ -59,11 +59,20 @@
   "exploreNow": "استكشف الآن",
   "finish": "إنهاء",
   "crime": "جريمة",
-"areYouSureDelete": "هل أنت متأكد أنك تريد الحذف؟",
-"cancel": "إلغاء",
-"confirm": "تأكيد",
-"oldPassword": "كلمة المرور القديمة",
-"newPassword": "كلمة المرور الجديدة"
+  "areYouSureDelete": "هل أنت متأكد أنك تريد الحذف؟",
+  "cancel": "إلغاء",
+  "confirm": "تأكيد",
+  "oldPassword": "كلمة المرور القديمة",
+  "newPassword": "كلمة المرور الجديدة"
+  "screenshots": "لقطات الشاشة",
+  "noScreenshots": "لا توجد لقطات شاشة متاحة",
+  "similar": "مشابه",
+  "summary": "الملخص",
+  "cast": "طاقم العمل",
+  "noCast": "لا يوجد طاقم متاح",
+  "genres": "الأنواع",
+  "noGenres": "لا توجد أنواع متاحة",
+  "watch": "شاهد"
 
 
 }

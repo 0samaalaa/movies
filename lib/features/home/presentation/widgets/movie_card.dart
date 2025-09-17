@@ -40,12 +40,12 @@ class MovieCard extends StatelessWidget {
                 opacity: isSelected ? 1 : 0.55,
                 duration: const Duration(milliseconds: 200),
                 child: Image.network(
-                  movie.posterImage,
+                  movie.poster,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,
                   errorBuilder: (context, error, stackTrace) =>
-                      Container(color: Colors.grey[800]),
+                      Container(color: MColors.dgrey),
                 ),
               ),
               Positioned(

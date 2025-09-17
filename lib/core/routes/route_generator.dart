@@ -5,6 +5,7 @@ import 'package:movies/features/home/presentation/pages/layout_screen.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/pages/reset_password.dart';
+import '../../features/movie_details/presentation/pages/movie_details.dart';
 import '../../features/on_boarding/presentation/pages/onboarding_view.dart';
 import '../../features/profile/presentation/pages/edit_profile.dart';
 import '../../features/profile/presentation/pages/profile_screen.dart';
@@ -29,6 +30,16 @@ class RouteGenerator {
 
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+
+      case Routes.movieDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
+        if (args != null && args.containsKey('movieId')) {
+          final int movieId = args['movieId'];
+          return MaterialPageRoute(
+            builder: (_) => MovieDetailsScreen(movieId: movieId),
+          );
+        }
+        return _undefinedRoute();
 
       case Routes.profileScreen:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());

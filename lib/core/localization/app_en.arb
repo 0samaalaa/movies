@@ -64,6 +64,15 @@
   "confirm": "Confirm",
    "oldPassword": "Old Password",
    "newPassword": "New Password"
+   "screenshots": "Screenshots",
+     "noScreenshots": "No Screenshots Available",
+     "similar": "Similar",
+     "summary": "Summary",
+     "cast": "Cast",
+     "noCast": "No Cast data available",
+     "genres": "Genres",
+     "noGenres": "No genres available",
+     "watch": "Watch"
 
 
 

@@ -1,3 +1,4 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -8,6 +9,7 @@ import '../../../../core/resources/app_icons.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/avatar_helper.dart';
 import '../../../../core/widgets/custom_text_filed.dart';
+import '../../../../main.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
@@ -137,9 +139,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
 
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: MColors.black,
       appBar: AppBar(
@@ -170,9 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           } else if (state is ProfileDeleted) {
             showAwesomeSnackBar("Success", state.message, ContentType.success);
             Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.loginScreen,
-            (route) => false);
+                context, Routes.loginScreen, (route) => false);
           }
         },
         builder: (context, state) {
@@ -212,13 +213,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-
                         Align(
                           alignment: Alignment.centerLeft,
                           child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, Routes.resetPasswordScreen);
-                              },
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, Routes.resetPasswordScreen);
+                            },
                             child: Text(
                               l10n.resetPassword,
                               style: const TextStyle(
@@ -229,12 +230,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 15),
                       ],
                     ),
                   ),
                 ),
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: AnimatedToggleSwitch<String>.rolling(
+                    current: Localizations.localeOf(context).languageCode,
+                    values: const ["en", "ar"],
+                    height: 43,
+                    indicatorSize: const Size(43, 43),
+                    spacing: 20,
+                    onChanged: (newLang) {
+                      final newLocale = Locale(newLang);
+                      MoviesApp.of(context)?.setLocale(newLocale);
+                    },
+                    iconBuilder: (value, foreground) {
+                      final flag = value == "en" ? MIcons.en : MIcons.arabic;
+                      return Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: foreground
+                              ? Border.all(color: MColors.yellow, width: 4)
+                              : null,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(flag, fit: BoxFit.cover),
+                        ),
+                      );
+                    },
+                    style: ToggleStyle(
+                      backgroundColor: Colors.transparent,
+                      borderRadius: const BorderRadius.all(Radius.circular(25)),
+                      borderColor: MColors.yellow,
+                      indicatorColor: Colors.transparent,
+                      indicatorBorder:
+                      Border.all(color: MColors.yellow, width: 4),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 50),
                 Column(
                   children: [
                     SizedBox(
@@ -271,9 +308,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               avatarId: selectedAvatarId,
                             ),
                           );
-
                         },
-
                         style: ElevatedButton.styleFrom(
                           backgroundColor: MColors.yellow,
                           padding: const EdgeInsets.symmetric(vertical: 16),
