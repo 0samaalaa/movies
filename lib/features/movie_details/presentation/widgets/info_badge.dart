@@ -21,7 +21,7 @@ class InfoBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // يوسّط العناصر
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               iconPath,
