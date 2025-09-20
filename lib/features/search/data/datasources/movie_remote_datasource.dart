@@ -7,7 +7,6 @@ class MovieRemoteDatasource {
     final url = Uri.parse(
       'https://yts.mx/api/v2/list_movies.json?limit=20&page=$page${query != null && query.isNotEmpty ? '&query_term=$query' : ''}',
     );
-
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['data']['movies'] as List?;
