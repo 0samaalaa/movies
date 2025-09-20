@@ -471,8 +471,6 @@ abstract class AppLocalizations {
 
 
 
-
-
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
