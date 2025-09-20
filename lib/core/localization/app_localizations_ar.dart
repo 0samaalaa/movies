@@ -222,6 +222,8 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noGenres => 'لا توجد أنواع متاحة';
 
+  @override
+  String get noMoviesfound => 'لا توجد أفلام متاحة';
 
 
 

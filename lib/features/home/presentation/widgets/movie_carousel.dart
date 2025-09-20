@@ -203,19 +203,16 @@ class _MovieCarouselState extends State<MovieCarousel> {
                                       ),
                                       child: Row(
                                         children: [
-                                          Image.asset(
-                                            MIcons.star,
-                                            width: 13,
-                                            height: 13,
-                                            color: MColors.yellow,
-                                          ),
+                                          Image.asset(MIcons.star,
+                                              color: MColors.yellow,
+                                              width: 15),
                                           const SizedBox(width: 3),
                                           Text(
-                                            "${genreMovies[i].rating}",
+                                            " ${genreMovies[i].rating}",
                                             style: const TextStyle(
                                               color: MColors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                         ],
