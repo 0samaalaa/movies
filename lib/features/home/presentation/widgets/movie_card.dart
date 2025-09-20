@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/resources/app_colors.dart';
+import '../../../../core/resources/app_icons.dart';
 import '../../domain/entities/movie.dart';
 
 class MovieCard extends StatelessWidget {
@@ -59,14 +60,16 @@ class MovieCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.star, color: MColors.yellow, size: 15),
-                      const SizedBox(width: 4),
+                      Image.asset(MIcons.star,
+                          color: MColors.yellow,
+                          width: 15),
+                      const SizedBox(width: 3),
                       Text(
-                        "${movie.rating}",
+                        " ${movie.rating}",
                         style: const TextStyle(
                           color: MColors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],

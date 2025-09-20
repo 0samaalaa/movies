@@ -466,6 +466,7 @@ abstract class AppLocalizations {
   String get similar;
   String get noCast;
   String get noGenres;
+  String get noMoviesfound;
 
 
 

@@ -13,32 +13,30 @@ class InfoBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: MColors.dgrey,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              iconPath,
-              width: 25,
-              height: 25,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: MColors.dgrey,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            iconPath,
+            width: 25,
+            height: 25,
+          ),
+          const SizedBox(width: 15),
+          Text(
+            label,
+            style: const TextStyle(
+              color: MColors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
             ),
-            const SizedBox(width: 15),
-            Text(
-              label,
-              style: const TextStyle(
-                color: MColors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

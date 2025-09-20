@@ -220,8 +220,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noGenres => 'No genres available';
 
-
-
+  @override
+  String get noMoviesfound => 'No movies found';
 
 
 }

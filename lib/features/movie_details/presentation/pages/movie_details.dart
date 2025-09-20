@@ -171,11 +171,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: Row(
                         children: [
-                          InfoBadge(iconPath: MIcons.heart, label: details.likeCount.toString()),
-                          const SizedBox(width: 15),
-                          InfoBadge(iconPath: MIcons.time, label: details.runtime.toString()),
-                          const SizedBox(width: 15),
-                          InfoBadge(iconPath: MIcons.star, label: details.rating.toString()),
+                          Expanded(child: InfoBadge(iconPath: MIcons.heart, label: details.likeCount.toString())),
+                          const SizedBox(width: 12),
+                          Expanded(child: InfoBadge(iconPath: MIcons.time, label: "${details.runtime}")),
+                          const SizedBox(width: 12),
+                          Expanded(child: InfoBadge(iconPath: MIcons.star, label: "${details.rating}")),
                         ],
                       ),
                     ),

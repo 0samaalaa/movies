@@ -48,6 +48,7 @@ dependencies:
   awesome_snackbar_content: any
   url_launcher: ^6.3.2
   html: any
+  dio: ^5.9.0
 
 
 dev_dependencies:

@@ -156,18 +156,15 @@ class _BrowseScreenState extends State<BrowseScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Image.asset(
-                                          MIcons.star,
-                                          width: 14,
-                                          height: 14,
-                                          color: MColors.yellow,
-                                        ),
+                                        Image.asset(MIcons.star,
+                                            color: MColors.yellow,
+                                            width: 15),
                                         const SizedBox(width: 3),
                                         Text(
-                                          "${movie.rating}",
+                                          " ${movie.rating}",
                                           style: const TextStyle(
                                             color: MColors.white,
-                                            fontSize: 12,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
