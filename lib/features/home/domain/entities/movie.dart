@@ -17,6 +17,8 @@ class Movie {
     required this.genres,
   });
 
+
+
   String get poster {
     if ((largeCoverImage ?? '').isNotEmpty) return largeCoverImage!;
     if ((mediumCoverImage ?? '').isNotEmpty) return mediumCoverImage!;
@@ -24,4 +26,3 @@ class Movie {
     return 'https://via.placeholder.com/500x750';
   }
 }
-

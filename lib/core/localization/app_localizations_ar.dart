@@ -225,6 +225,32 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noMoviesfound => 'لا توجد أفلام متاحة';
 
+  @override
+  String get all => 'الكل';
+  @override
+  String get documentary => 'وثائقي';
+  @override
+  String get family => 'عائلي';
+  @override
+  String get filmNoir => 'فيلم نوير';
+  @override
+  String get gameShow => 'مسابقة تلفزيونية';
+  @override
+  String get musical => 'ميوزيكال';
+  @override
+  String get news => 'أخبار';
+  @override
+  String get realityTV => 'تلفزيون واقع';
+  @override
+  String get sport => 'رياضة';
+  @override
+  String get talkShow => 'برنامج حواري';
+  @override
+  String get war => 'حرب';
+  @override
+  String get western => 'غربي';
+
+
 
 
 

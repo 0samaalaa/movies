@@ -467,6 +467,19 @@ abstract class AppLocalizations {
   String get noCast;
   String get noGenres;
   String get noMoviesfound;
+  String get all;
+  String get documentary;
+  String get family;
+  String get filmNoir;
+  String get gameShow;
+  String get musical;
+  String get news;
+  String get realityTV;
+  String get sport;
+  String get talkShow;
+  String get war;
+  String get western;
+
 
 
 

@@ -223,5 +223,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noMoviesfound => 'No movies found';
 
+  @override
+  String get all => 'All';
+  @override
+  String get documentary => 'Documentary';
+  @override
+  String get family => 'Family';
+  @override
+  String get filmNoir => 'Film-Noir';
+  @override
+  String get gameShow => 'Game-Show';
+  @override
+  String get musical => 'Musical';
+  @override
+  String get news => 'News';
+  @override
+  String get realityTV => 'Reality-TV';
+  @override
+  String get sport => 'Sport';
+  @override
+  String get talkShow => 'Talk-Show';
+  @override
+  String get war => 'War';
+  @override
+  String get western => 'Western';
+
+
 
 }

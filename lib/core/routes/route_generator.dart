@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:movies/core/routes/routes.dart';
 import 'package:movies/features/home/presentation/pages/home_screen.dart';
-import 'package:movies/features/home/presentation/pages/layout_screen.dart';
+import 'package:movies/features/layout/presentation/pages/layout_screen.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/pages/reset_password.dart';
+import '../../features/browse/presentation/pages/browse_screen.dart';
 import '../../features/movie_details/presentation/pages/movie_details.dart';
 import '../../features/on_boarding/presentation/pages/onboarding_view.dart';
 import '../../features/profile/presentation/pages/edit_profile.dart';
@@ -30,6 +31,14 @@ class RouteGenerator {
 
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+
+      case Routes.browseScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => BrowseScreen(
+            initialGenre: args?['genre'],
+          ),
+        );
 
       case Routes.movieDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>?;

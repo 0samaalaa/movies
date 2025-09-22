@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferencesHelper {
   static const String HasSeenOnboarding = 'hasSeenOnboarding';
   static const String LanguageCode = 'languageCode';
-
   final SharedPreferences prefs;
 
   PreferencesHelper(this.prefs);

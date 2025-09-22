@@ -13,6 +13,7 @@ import 'features/home/data/repositories/movie_repository_impl.dart';
 import 'features/home/domain/usecases/get_movies.dart';
 import 'features/home/presentation/bloc/movie_bloc.dart';
 import 'features/home/presentation/bloc/movie_event.dart';
+import 'features/layout/presentation/cubit/Layout_cubit.dart';
 import 'features/on_boarding/presentation/cubit/onboarding_cubit.dart';
 import 'features/profile/data/datasources/profile_remote_datasource.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
@@ -51,6 +52,9 @@ Future<void> main() async {
           create: (_) => ProfileBloc(
             ProfileRepositoryImpl(ProfileRemoteDatasource()),
           )..add(LoadProfileEvent()),
+        ),
+        BlocProvider(
+          create: (_) => LayoutCubit(),
         ),
       ],
       child: MoviesApp(
