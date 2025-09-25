@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../resources/app_colors.dart';
 
-
-class CustomTextFiled extends StatefulWidget {
+class CustomTextFiled extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
@@ -14,8 +12,9 @@ class CustomTextFiled extends StatefulWidget {
   final bool isPassword;
   final int? maxLines;
   final bool readOnly;
-  final bool obscureText;
 
+  final bool obscureText;
+  final VoidCallback? onToggleVisibility;
 
   const CustomTextFiled({
     super.key,
@@ -27,27 +26,19 @@ class CustomTextFiled extends StatefulWidget {
     this.validator,
     this.maxLines,
     this.isPassword = false,
-    this.readOnly =false,
+    this.readOnly = false,
     this.obscureText = false,
-
-
+    this.onToggleVisibility,
   });
-
-  @override
-  State<CustomTextFiled> createState() => _CustomTextFiledState();
-}
-
-class _CustomTextFiledState extends State<CustomTextFiled> {
-  bool isShow = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: widget.isPassword ? isShow : false,
-      maxLines: widget.maxLines ?? 1,
-      controller: widget.controller,
-      validator: widget.validator,
-      readOnly: widget.readOnly,
+      obscureText: isPassword ? obscureText : false,
+      maxLines: maxLines ?? 1,
+      controller: controller,
+      validator: validator,
+      readOnly: readOnly,
       style: const TextStyle(
         color: MColors.white,
         fontSize: 16,
@@ -57,11 +48,12 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
         filled: true,
         fillColor: MColors.dgrey,
         hintStyle: TextStyle(
-          color: Colors.white , fontSize: 16,
+          color: Colors.white,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           fontFamily: GoogleFonts.inter().fontFamily,
         ),
-        hintText: widget.hintText,
+        hintText: hintText,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: MColors.dgrey),
           borderRadius: BorderRadius.circular(16),
@@ -74,25 +66,18 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
           borderSide: const BorderSide(color: MColors.dgrey),
           borderRadius: BorderRadius.circular(16),
         ),
-        prefix: widget.prefix,
-        prefixIcon: widget.prefixIcon,
-        suffixIcon: widget.isPassword
+        prefix: prefix,
+        prefixIcon: prefixIcon,
+        suffixIcon: isPassword
             ? IconButton(
-          onPressed: () {
-            setState(() {
-              isShow = !isShow;
-            });
-          },
+          onPressed: onToggleVisibility,
           icon: Icon(
-            isShow
-                ? Icons.visibility_rounded
-                : Icons.visibility_off_rounded,
+            obscureText ? Icons.visibility_rounded : Icons.visibility_off_rounded,
             color: MColors.white,
           ),
         )
-            : widget.suffixIcon,
+            : suffixIcon,
       ),
     );
   }
-
 }

@@ -17,11 +17,12 @@ class Movie {
     required this.genres,
   });
 
+
+
   String get poster {
     if ((largeCoverImage ?? '').isNotEmpty) return largeCoverImage!;
     if ((mediumCoverImage ?? '').isNotEmpty) return mediumCoverImage!;
     if ((smallCoverImage ?? '').isNotEmpty) return smallCoverImage!;
-    return 'https://via.placeholder.com/500x750';
+    return 'https://placehold.co/190x279?text=error';
   }
 }
-

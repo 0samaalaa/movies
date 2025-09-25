@@ -18,5 +18,6 @@ class MImages {
   static const String popcorn = "assets/images/popcorn.png";
   static const String an = "assets/images/an.png";
   static const String wn = "assets/images/wn.png";
+  static const String placeholder = "assets/images/placeholder.png";
 
 }

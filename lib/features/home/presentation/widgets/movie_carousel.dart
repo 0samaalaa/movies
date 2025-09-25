@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/features/home/presentation/widgets/section_title.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
 import '../../../../core/routes/routes.dart';
+import '../../../layout/presentation/cubit/Layout_cubit.dart';
 import '../../domain/entities/movie.dart';
+import '../../../layout/presentation/pages/layout_screen.dart';
 import 'movie_card.dart';
 
 class MovieCarousel extends StatefulWidget {
@@ -26,33 +29,60 @@ class _MovieCarouselState extends State<MovieCarousel> {
   }
 
   String _getTranslatedGenre(BuildContext context, String genre) {
+    final l10n = AppLocalizations.of(context)!;
     switch (genre.toLowerCase()) {
       case "action":
-        return AppLocalizations.of(context)!.action;
-      case "drama":
-        return AppLocalizations.of(context)!.drama;
-      case "fantasy":
-        return AppLocalizations.of(context)!.fantasy;
-      case "sci-fi":
-        return AppLocalizations.of(context)!.sciFi;
-      case "comedy":
-        return AppLocalizations.of(context)!.comedy;
+        return l10n.action;
       case "adventure":
-        return AppLocalizations.of(context)!.adventure;
-      case "horror":
-        return AppLocalizations.of(context)!.horror;
-      case "crime":
-        return AppLocalizations.of(context)!.crime;
-      case "romance":
-        return AppLocalizations.of(context)!.romance;
+        return l10n.adventure;
       case "animation":
-        return AppLocalizations.of(context)!.animation;
-      case "thriller":
-        return AppLocalizations.of(context)!.thriller;
-      case "mystery":
-        return AppLocalizations.of(context)!.mystery;
+        return l10n.animation;
+      case "biography":
+        return l10n.biography;
+      case "comedy":
+        return l10n.comedy;
+      case "crime":
+        return l10n.crime;
+      case "documentary":
+        return l10n.documentary;
+      case "drama":
+        return l10n.drama;
+      case "family":
+        return l10n.family;
+      case "fantasy":
+        return l10n.fantasy;
+      case "film-noir":
+        return l10n.filmNoir;
+      case "game-show":
+        return l10n.gameShow;
+      case "history":
+        return l10n.history;
+      case "horror":
+        return l10n.horror;
       case "music":
-        return AppLocalizations.of(context)!.music;
+        return l10n.music;
+      case "musical":
+        return l10n.musical;
+      case "mystery":
+        return l10n.mystery;
+      case "news":
+        return l10n.news;
+      case "reality-tv":
+        return l10n.realityTV;
+      case "romance":
+        return l10n.romance;
+      case "sci-fi":
+        return l10n.sciFi;
+      case "sport":
+        return l10n.sport;
+      case "talk-show":
+        return l10n.talkShow;
+      case "thriller":
+        return l10n.thriller;
+      case "war":
+        return l10n.war;
+      case "western":
+        return l10n.western;
       default:
         return genre;
     }
@@ -64,7 +94,7 @@ class _MovieCarouselState extends State<MovieCarousel> {
         .expand((movie) => movie.genres)
         .toSet()
         .toList()
-      ..sort();
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     return Stack(
       children: [
@@ -136,6 +166,7 @@ class _MovieCarouselState extends State<MovieCarousel> {
                           const Spacer(),
                           TextButton(
                             onPressed: () {
+                              context.read<LayoutCubit>().changeTab(2, genre: genre);
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -191,44 +222,40 @@ class _MovieCarouselState extends State<MovieCarousel> {
                 fit: BoxFit.cover,
                 width: 107,
                 ),
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: MColors.black,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            MIcons.star,
-                                            width: 13,
-                                            height: 13,
-                                            color: MColors.yellow,
-                                          ),
-                                          const SizedBox(width: 3),
-                                          Text(
-                                            "${genreMovies[i].rating}",
-                                            style: const TextStyle(
-                                              color: MColors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ), ),
+                 Positioned(
+                   top: 10,
+                   left: 10,
+                   child: Container(
+                     padding: const EdgeInsets.symmetric(
+                         horizontal: 8, vertical: 2),
+                     decoration: BoxDecoration(
+                       color: MColors.black,
+                       borderRadius: BorderRadius.circular(10),
+                     ),
+                     child: Row(
+                       children: [
+                         Image.asset(MIcons.star,
+                             color: MColors.yellow,
+                             width: 15),
+                         const SizedBox(width: 3),
+                         Text(
+                           " ${genreMovies[i].rating}",
+                           style: const TextStyle(
+                             color: MColors.white,
+                             fontSize: 16,
+                             fontWeight: FontWeight.w600,
+                           ),
+                         ),
+                       ],
+                     ),
+                   ),
+                 ),
+                ],
+                ),
+                ),
+                ),
+                ),
+                ),), ),
                     const SizedBox(height: 20),
                   ],
                 );

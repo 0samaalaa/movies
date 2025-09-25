@@ -49,7 +49,7 @@ class OnboardingPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isFirstPage ? 36 : 24,
+                      fontSize: isFirstPage ? 20 : 24,
                       fontWeight: FontWeight.w500,
                       height: 1.5,
                     ),
@@ -61,7 +61,7 @@ class OnboardingPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: MColors.white.withOpacity(0.85),
-                        fontSize: 20,
+                        fontSize: 16,
                         height: 1.5,
                       ),
                     ),
@@ -95,12 +95,12 @@ class OnboardingPage extends StatelessWidget {
                         style: const TextStyle(
                           color: MColors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   if (pageIndex > 1)
                     SizedBox(
                       width: double.infinity,
@@ -124,11 +124,13 @@ class OnboardingPage extends StatelessWidget {
                           style: const TextStyle(
                             color: MColors.yellow,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 14,
                           ),
                         ),
                       ),
                     ),
+                  const SizedBox(height: 5),
+
                 ],
               ),
             ),

@@ -4,3 +4,4 @@ class FetchMovieDetailsEvent extends MovieDetailsEvent {
   final int movieId;
   FetchMovieDetailsEvent(this.movieId);
 }
+

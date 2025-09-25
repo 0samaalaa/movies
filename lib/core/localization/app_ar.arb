@@ -29,7 +29,6 @@
   "alreadyHaveAccount": "لديك حساب بالفعل؟",
   "verifyEmail": "تأكيد البريد الإلكتروني",
   "seeMore": "عرض المزيد",
-  "action": "إثارة",
   "watch": "مشاهدة",
   "search": "بحث",
   "resetPassword": "إعادة تعيين كلمة المرور",
@@ -43,19 +42,6 @@
   "summary": "الملخص",
   "cast": "طاقم العمل",
   "character": "الشخصية",
-  "genres": "الأنواع",
-  "sciFi": "خيال علمي",
-  "adventure": "مغامرة",
-  "fantasy": "فانتازيا",
-  "horror": "رعب",
-  "animation": "رسوم متحركة",
-  "biography": "سيرة ذاتية",
-  "drama": "دراما",
-  "comedy": "كوميدي",
-  "romance": "رومانسي",
-  "thriller": "إثارة وتشويق",
-  "mystery": "غموض",
-  "music": "موسيقى"
   "exploreNow": "استكشف الآن",
   "finish": "إنهاء",
   "crime": "جريمة",
@@ -73,6 +59,37 @@
   "genres": "الأنواع",
   "noGenres": "لا توجد أنواع متاحة",
   "watch": "شاهد"
+  "NoMoviesfound": "لا توجد افلام متاحة"
+    "All": "الكل",
+    "Action": "أكشن",
+    "Adventure": "مغامرة",
+    "Animation": "رسوم متحركة",
+    "Biography": "سيرة ذاتية",
+    "Comedy": "كوميديا",
+    "Crime": "جريمة",
+    "Documentary": "وثائقي",
+    "Drama": "دراما",
+    "Family": "عائلي",
+    "Fantasy": "فانتازيا",
+    "FilmNoir": "فيلم-نوير",
+    "GameShow": "برنامج ألعاب",
+    "History": "تاريخي",
+    "Horror": "رعب",
+    "Music": "موسيقى",
+    "Musical": "ميوزيكال",
+    "Mystery": "غموض",
+    "News": "أخبار",
+    "RealityTV": "واقعي",
+    "Romance": "رومانسي",
+    "SciFi": "خيال علمي",
+    "Sport": "رياضة",
+    "TalkShow": "برنامج حواري",
+    "Thriller": "إثارة",
+    "War": "حرب",
+    "Western": "ويسترن"
+    "noSimilar": "لا توجد أفلام مشابهة"
+
+
 
 
 }

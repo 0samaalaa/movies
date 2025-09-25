@@ -4,11 +4,15 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/resources/app_icons.dart';
-import '../../domain/entities/movie_details_entity.dart';
+import '../../../favorites/presentation/bloc/favorites_bloc.dart';
+import '../../../favorites/presentation/bloc/favorites_event.dart';
 import '../bloc/movie_details_bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../bloc/movie_details_state.dart';
+import '../widgets/favorite_button.dart';
 import '../widgets/info_badge.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/bloc/profile_event.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
@@ -19,14 +23,24 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
-  bool isSaved = false;
+  @override
+  void initState() {
+    super.initState();
+    context.read<FavoritesBloc>().add(CheckIfFavorite(widget.movieId.toString()));
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider(
-      create: (_) => MovieDetailsBloc()..add(FetchMovieDetailsEvent(widget.movieId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => MovieDetailsBloc()..add(FetchMovieDetailsEvent(widget.movieId)),
+        ),
+        BlocProvider.value(value: context.read<FavoritesBloc>()),
+        BlocProvider.value(value: context.read<ProfileBloc>()),
+      ],
       child: Scaffold(
         backgroundColor: MColors.black,
         extendBodyBehindAppBar: true,
@@ -38,20 +52,33 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               Directionality.of(context) == TextDirection.rtl ? MIcons.backr : MIcons.back,
               width: 18,
             ),
+
             onPressed: () => Navigator.pop(context),
           ),
           actions: [
-            IconButton(
-              icon: Image.asset(isSaved ? MIcons.saved : MIcons.save, width: 20),
-              onPressed: () {
-                setState(() {
-                  isSaved = !isSaved;
-                });
+            BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+              builder: (context, state) {
+                if (state is MovieDetailsLoaded) {
+                  return FavoriteButton(details: state.details);
+                }
+                return const SizedBox.shrink();
               },
             ),
           ],
         ),
-        body: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+        body: BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
+          listener: (context, state) {
+            if (state is MovieDetailsLoaded) {
+              final details = state.details;
+              context.read<ProfileBloc>().add(
+                AddToHistoryEvent({
+                  "id": details.id,
+                  "title": details.title,
+                  "posterPath": details.poster,
+                }),
+              );
+            }
+          },
           builder: (context, state) {
             if (state is MovieDetailsLoading) {
               return const Center(
@@ -59,7 +86,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               );
             } else if (state is MovieDetailsLoaded) {
               final details = state.details;
-
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,13 +121,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  final trailerUrl =
-                                      'https://www.youtube.com/watch?v=${details.ytTrailerCode}';
+                                  final messenger = ScaffoldMessenger.of(context);
+                                  final trailerUrl = 'https://www.youtube.com/watch?v=${details.ytTrailerCode}';
                                   if (await canLaunchUrl(Uri.parse(trailerUrl))) {
                                     await launchUrl(Uri.parse(trailerUrl),
                                         mode: LaunchMode.externalApplication);
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    messenger.showSnackBar(
                                       const SnackBar(content: Text('Could not launch trailer')),
                                     );
                                   }
@@ -137,49 +163,52 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     ),
                     const SizedBox(height: 10),
                     Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MColors.red,
-                          minimumSize: const Size(390, 58),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MColors.red,
+                            minimumSize: const Size(380, 58),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
                           ),
-                        ),
-                        onPressed: () async {
-                          final url = details.url;
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url),
-                                mode: LaunchMode.externalApplication);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Cannot open link")),
-                            );
-                          }
-                        },
-                        child: Text(
-                          l10n.watch,
-                          style: const TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold,
-                            color: MColors.white,
+                          onPressed: () async {
+                            final messenger = ScaffoldMessenger.of(context);
+                            final url = details.url;
+                            if (await canLaunchUrl(Uri.parse(url))) {
+                              await launchUrl(Uri.parse(url),
+                                  mode: LaunchMode.externalApplication);
+                            } else {
+                              messenger.showSnackBar(
+                                const SnackBar(content: Text('Cannot open link')),
+                              );
+                            }
+                          },
+                          child: Text(
+                            l10n.watch,
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                              color: MColors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Row(
                         children: [
-                          InfoBadge(iconPath: MIcons.heart, label: details.likeCount.toString()),
-                          const SizedBox(width: 15),
-                          InfoBadge(iconPath: MIcons.time, label: details.runtime.toString()),
-                          const SizedBox(width: 15),
-                          InfoBadge(iconPath: MIcons.star, label: details.rating.toString()),
+                          Expanded(child: InfoBadge(iconPath: MIcons.heart, label: details.likeCount.toString())),
+                          const SizedBox(width: 12),
+                          Expanded(child: InfoBadge(iconPath: MIcons.time, label: "${details.runtime}")),
+                          const SizedBox(width: 12),
+                          Expanded(child: InfoBadge(iconPath: MIcons.star, label: "${details.rating}")),
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 21),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -200,15 +229,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              url,
-                              width: double.infinity,
-                              height: 120,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(
-                                height: 120,
-                                color: MColors.dgrey,
-                                alignment: Alignment.center,
+                            child: Image.network(url, width: double.infinity, height: 120, fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(height: 120, color: MColors.dgrey, alignment: Alignment.center,
                                 child: const Text(
                                   'No screenshot available',
                                   style: TextStyle(color: MColors.white),
@@ -221,13 +243,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     )
                         : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      child:  Text(
+                      child: Text(
                         l10n.noScreenshots,
-                        style: TextStyle(
-                          color: MColors.grey,
-                          fontSize: 16,
-                          fontStyle: FontStyle.normal,
-                        ),
+                        style: const TextStyle(color: MColors.grey, fontSize: 16),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -243,7 +261,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Padding(
+                    state.suggestions.isEmpty
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      child: Text(
+                        l10n.noSimilar,
+                        style: const TextStyle(color: MColors.grey, fontSize: 16),
+                      ),
+                    )
+                        : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: GridView.builder(
                         padding: EdgeInsets.zero,
@@ -274,11 +300,19 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               child: Stack(
                                 children: [
                                   Positioned.fill(
-                                    child: Image.network(
+                                    child: movie.coverImage.isNotEmpty
+                                        ? Image.network(
                                       movie.coverImage,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) => Container(color: MColors.dgrey),
+                                      errorBuilder: (_, __, ___) =>
+                                          Container(color: MColors.dgrey),
                                     )
+                                        : Container(
+                                      color: MColors.dgrey,
+                                      child: const Center(
+                                        child: Icon(Icons.image_not_supported, color: MColors.white, size: 40),
+                                      ),
+                                    ),
                                   ),
                                   Positioned(
                                     top: 8,
@@ -348,7 +382,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     ),
                     details.cast.isNotEmpty
                         ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                       child: Column(
                         children: details.cast.map((actor) {
                           return Card(
@@ -373,11 +407,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               ),
                               title: Text(
                                 'Name: ${actor.name}',
-                                style: const TextStyle(color: MColors.white, fontSize: 18),
+                                style: const TextStyle(color: MColors.white, fontSize: 15),
                               ),
                               subtitle: Text(
                                 'Character: ${actor.characterName}',
-                                style: const TextStyle(color: MColors.white, fontSize: 18),
+                                style: const TextStyle(color: MColors.white, fontSize: 15),
                               ),
                             ),
                           );
@@ -422,12 +456,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             style: const TextStyle(color: MColors.white),
                           ),
                         ))
-                            .toList()
-                            : [
-                          Text(
-                            l10n.noGenres,
-                            style: const TextStyle(color: MColors.dgrey),
-                          )
+                            .toList() : [Text(l10n.noGenres, style: const TextStyle(color: MColors.dgrey),
+                        )
                         ],
                       ),
                     ),

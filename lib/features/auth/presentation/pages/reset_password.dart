@@ -53,7 +53,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: MColors.black,
       appBar: AppBar(
@@ -77,12 +76,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               message: state.message,
               type: ContentType.success,
             );
+            context.read<ProfileBloc>().add(LoadProfileEvent());
             Navigator.pop(context);
-          } else if (state is PasswordResetFailure) {
+              } else if (state is PasswordResetFailure) {
             _showSnackBar(
               context,
               title: "error",
-              message: state.error,
+              message: state.message,
               type: ContentType.failure,
             );
           }
@@ -100,68 +100,38 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-
-              // Old Password
               CustomTextFiled(
                 controller: oldPasswordController,
                 hintText: l10n.oldPassword,
+                isPassword: true,
                 obscureText: !_isOldPasswordVisible,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Image.asset(
-                    MIcons.lock,
-                    width: 20,
-                    height: 20,
-                    color: MColors.white,
-                  ),
+                  child: Image.asset(MIcons.lock, width: 20, height: 20, color: MColors.white),
                 ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isOldPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: MColors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isOldPasswordVisible = !_isOldPasswordVisible;
-                    });
-                  },
-                ),
+                onToggleVisibility: () {
+                  setState(() {
+                    _isOldPasswordVisible = !_isOldPasswordVisible;
+                  });
+                },
               ),
               const SizedBox(height: 20),
-
-              // New Password
               CustomTextFiled(
                 controller: newPasswordController,
                 hintText: l10n.newPassword,
+                isPassword: true,
                 obscureText: !_isNewPasswordVisible,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Image.asset(
-                    MIcons.lock,
-                    width: 20,
-                    height: 20,
-                    color: MColors.white,
-                  ),
+                  child: Image.asset(MIcons.lock, width: 20, height: 20, color: MColors.white),
                 ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isNewPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: MColors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isNewPasswordVisible = !_isNewPasswordVisible;
-                    });
-                  },
-                ),
+                onToggleVisibility: () {
+                  setState(() {
+                    _isNewPasswordVisible = !_isNewPasswordVisible;
+                  });
+                },
               ),
               const SizedBox(height: 40),
-
-              // Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

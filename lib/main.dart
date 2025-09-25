@@ -2,37 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 import 'core/app_bloc_observer.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/resources/app_colors.dart';
 import 'core/routes/route_generator.dart';
 import 'core/routes/routes.dart';
 import 'core/utils/preferences_helper.dart';
+import 'features/favorites/domain/usecases/add_favorite.dart';
+import 'features/favorites/domain/usecases/get_favorites.dart';
+import 'features/favorites/domain/usecases/is_favorite.dart';
+import 'features/favorites/domain/usecases/remove_favorite.dart';
+import 'features/favorites/presentation/bloc/favorites_bloc.dart';
+import 'features/favorites/data/repositories/favorites_repository_impl.dart';
+import 'features/favorites/data/datasources/favorites_remote_data_source.dart';
 import 'features/home/data/datasources/movie_remote_datasource.dart';
 import 'features/home/data/repositories/movie_repository_impl.dart';
 import 'features/home/domain/usecases/get_movies.dart';
 import 'features/home/presentation/bloc/movie_bloc.dart';
 import 'features/home/presentation/bloc/movie_event.dart';
+import 'features/layout/presentation/cubit/Layout_cubit.dart';
 import 'features/on_boarding/presentation/cubit/onboarding_cubit.dart';
 import 'features/profile/data/datasources/profile_remote_datasource.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/profile/presentation/bloc/profile_event.dart';
+import 'features/auth/data/repositories/auth_repository.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
 
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+GlobalKey<ScaffoldMessengerState>();
 
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
   final preferencesHelper = PreferencesHelper(prefs);
-
   final hasSeenOnboarding = preferencesHelper.hasSeenOnboarding;
   final savedLang = preferencesHelper.languageCode;
-
   final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   Bloc.observer = AppBlocObserver();
+
+  final dio = Dio();
+  final favoritesRemoteSource = FavoritesRemoteSource(dio);
+  final favoritesRepository = FavoritesRepositoryImpl(favoritesRemoteSource);
+  final getFavoritesUseCase = GetFavorites(favoritesRepository);
+
 
   runApp(
     MultiBlocProvider(
@@ -41,16 +57,30 @@ Future<void> main() async {
           create: (_) => OnboardingCubit(preferencesHelper),
         ),
         BlocProvider(
+          create: (_) => ProfileBloc(
+            ProfileRepositoryImpl(ProfileRemoteDatasource(), preferencesHelper),
+            preferencesHelper,
+            getFavoritesUseCase,
+          )..add(LoadProfileEvent()),
+        ),
+        BlocProvider(
+          create: (_) => FavoritesBloc(
+            getFavorites: GetFavorites(favoritesRepository),
+            addFavorite: AddFavorite(favoritesRepository),
+            removeFavorite: RemoveFavorite(favoritesRepository),
+            isFavorite: IsFavorite(favoritesRepository),
+          ),
+        ),
+        BlocProvider(
           create: (_) => MovieBloc(
-            GetMovies(
-              MovieRepositoryImpl(MovieRemoteDatasource()),
-            ),
+            GetMovies(MovieRepositoryImpl(MovieRemoteDatasource())),
           )..add(LoadMoviesEvent()),
         ),
         BlocProvider(
-          create: (_) => ProfileBloc(
-            ProfileRepositoryImpl(ProfileRemoteDatasource()),
-          )..add(LoadProfileEvent()),
+          create: (_) => LayoutCubit(),
+        ),
+        BlocProvider(
+          create: (_) => AuthBloc(AuthRepository()),
         ),
       ],
       child: MoviesApp(

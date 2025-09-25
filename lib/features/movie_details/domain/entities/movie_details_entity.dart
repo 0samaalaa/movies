@@ -127,10 +127,9 @@ class MovieSuggestion {
     if (mediumCoverImage.isNotEmpty) return mediumCoverImage;
     if (largeCoverImage.isNotEmpty) return largeCoverImage;
     if (smallCoverImage.isNotEmpty) return smallCoverImage;
-    return 'https://via.placeholder.com/100x140';
+    return 'https://placehold.co/179x279?text=error';
   }
 }
-
 
 
 

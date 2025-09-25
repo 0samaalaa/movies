@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/resources/app_colors.dart';
-import '../../../../core/resources/app_icons.dart';
-import '../../../../core/routes/routes.dart';
 import '../../../home/presentation/bloc/movie_bloc.dart';
 import '../../../home/presentation/bloc/movie_event.dart';
 import '../../../home/presentation/bloc/movie_state.dart';
+import '../../../layout/presentation/cubit/layout_cubit.dart';
+import '../widgets/genere_tab_bar.dart';
+import '../widgets/movie_grid.dart';
 
 class BrowseScreen extends StatefulWidget {
-  const BrowseScreen({super.key});
+  final String? initialGenre;
+  const BrowseScreen({super.key, this.initialGenre});
 
   @override
   State<BrowseScreen> createState() => _BrowseScreenState();
@@ -17,184 +18,143 @@ class BrowseScreen extends StatefulWidget {
 
 class _BrowseScreenState extends State<BrowseScreen> {
   int selectedGenre = 0;
+  List<String> allGenres = ["all"];
+  late ScrollController genreTabController;
 
   @override
   void initState() {
     super.initState();
-    context.read<MovieBloc>().add(LoadMoviesEvent());
+    genreTabController = ScrollController();
+    final state = context.read<MovieBloc>().state;
+    if (state is! MovieLoaded) {
+      context.read<MovieBloc>().add(LoadMoviesEvent());
+    }
+  }
+
+  void loadGenresFromMovies(MovieLoaded state) {
+    final genresFromMovies = state.movies
+        .expand((m) => m.genres)
+        .toSet()
+        .toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+    if (allGenres.length == 1) {
+      setState(() {
+        allGenres.addAll(genresFromMovies);
+      });
+
+      final layoutState = context.read<LayoutCubit>().state;
+      final genreToSelect = layoutState.initialGenre ?? widget.initialGenre ?? "all";
+      final idx = allGenres.indexOf(genreToSelect);
+      if (idx != -1) {
+        setState(() => selectedGenre = idx);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          scrollToSelectedTab(idx);
+          _filterByGenre(allGenres[idx]);
+        });
+      }
+    }
+  }
+
+  void scrollToSelectedTab(int index) {
+    const double tabWidth = 90.0;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    double offset = (tabWidth * index) - (screenWidth / 2) + (tabWidth / 2);
+    if (offset < 0) offset = 0;
+    if (genreTabController.hasClients) {
+      final maxScroll = genreTabController.position.maxScrollExtent;
+      if (offset > maxScroll) offset = maxScroll;
+
+      genreTabController.animateTo(
+        offset,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  void _filterByGenre(String genre) {
+    if (genre.toLowerCase() == "all") {
+      context.read<MovieBloc>().add(LoadMoviesEvent());
+    } else {
+      context.read<MovieBloc>().add(FilterMoviesByGenreEvent(genre));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final genres = [
-      AppLocalizations.of(context)!.action,
-      AppLocalizations.of(context)!.adventure,
-      AppLocalizations.of(context)!.animation,
-      AppLocalizations.of(context)!.biography,
-      AppLocalizations.of(context)!.comedy,
-      AppLocalizations.of(context)!.crime,
-      AppLocalizations.of(context)!.drama,
-      AppLocalizations.of(context)!.fantasy,
-      AppLocalizations.of(context)!.horror,
-    ];
-    return Scaffold(
-      backgroundColor: MColors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 50,left: 16,right: 16),
-            child: SizedBox(
-              height: 60,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                itemCount: genres.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 10),
-                itemBuilder: (context, index) {
-                  final isSelected = index == selectedGenre;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedGenre = index;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return BlocListener<LayoutCubit, LayoutState>(
+      listenWhen: (previous, current) =>
+      previous.initialGenre != current.initialGenre,
+      listener: (context, state) {
+        if (!mounted) return;
+        final idx = state.initialGenre != null && allGenres.contains(state.initialGenre)
+            ? allGenres.indexOf(state.initialGenre!)
+            : 0;
+
+        setState(() => selectedGenre = idx);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          scrollToSelectedTab(idx);
+        });
+        _filterByGenre(allGenres[idx]);
+      },
+      child: Scaffold(
+        backgroundColor: MColors.black,
+        body: Column(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15, left: 8, right: 8, bottom: 15),
+                child: BlocBuilder<MovieBloc, MovieState>(
+                  buildWhen: (previous, current) => current is MovieLoaded,
+                  builder: (context, state) {
+                    if (state is MovieLoaded) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (!mounted) return;
+                        loadGenresFromMovies(state);
                       });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      decoration: BoxDecoration(
-                        color: isSelected ? MColors.yellow : Colors.transparent,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: MColors.yellow,
-                          width: 2,
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-                      child: Text(
-                        genres[index],
-                        style: TextStyle(
-                          color: isSelected ? Colors.black : MColors.yellow,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  );
+                    }
+                    return GenreTabBar(
+                      allGenres: allGenres,
+                      selectedGenre: selectedGenre,
+                      controller: genreTabController,
+                      onGenreSelected: (index) {
+                        setState(() => selectedGenre = index);
+                        context.read<LayoutCubit>().setGenre(allGenres[index]);
+                        scrollToSelectedTab(index);
+                        _filterByGenre(allGenres[index]);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: BlocBuilder<MovieBloc, MovieState>(
+                buildWhen: (previous, current) =>
+                current is MovieLoading || current is MovieLoaded,
+                builder: (context, state) {
+                  if (state is MovieLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: MColors.yellow),
+                    );
+                  } else if (state is MovieLoaded) {
+                    final movies = state.movies;
+                    return MovieGrid(
+                      movies: movies,
+                      screenWidth: screenWidth,
+                    );
+                  }
+                  return const SizedBox.shrink();
                 },
               ),
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<MovieBloc, MovieState>(
-              builder: (context, state) {
-                if (state is MovieLoading) {
-                  return const Center(child: CircularProgressIndicator(color: MColors.yellow));
-                } else if (state is MovieLoaded) {
-                  final movies = state.movies;
-                  if (movies.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "No movies found",
-                        style: TextStyle(color: MColors.white),
-                      ),
-                    );
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    child: GridView.builder(
-                      itemCount: movies.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.65,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemBuilder: (context, idx) {
-                        final movie = movies[idx];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.movieDetailsScreen,
-                              arguments: {'movieId': movie.id},
-                            );
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(18),
-                            child: Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: Image.network(
-                                    movie.poster,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) =>
-                                        Container(color: MColors.dgrey),
-                                  ),
-                                ),
-                                Positioned.fill(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.transparent,
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 8,
-                                  left: 8,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: MColors.black,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          MIcons.star,
-                                          width: 14,
-                                          height: 14,
-                                          color: MColors.yellow,
-                                        ),
-                                        const SizedBox(width: 3),
-                                        Text(
-                                          "${movie.rating}",
-                                          style: const TextStyle(
-                                            color: MColors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else if (state is MovieError) {
-                  return Center(
-                    child: Text(
-                      state.message,
-                      style: const TextStyle(color: MColors.red),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
