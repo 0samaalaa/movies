@@ -4,7 +4,7 @@ import '../../../../core/resources/app_colors.dart';
 import '../../../home/presentation/bloc/movie_bloc.dart';
 import '../../../home/presentation/bloc/movie_event.dart';
 import '../../../home/presentation/bloc/movie_state.dart';
-import '../../../layout/presentation/cubit/layout_cubit.dart';
+import '../../../layout/presentation/cubit/Layout_cubit.dart';
 import '../widgets/genere_tab_bar.dart';
 import '../widgets/movie_grid.dart';
 
