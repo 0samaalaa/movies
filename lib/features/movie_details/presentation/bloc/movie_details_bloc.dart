@@ -118,4 +118,3 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
 
 }
 
-

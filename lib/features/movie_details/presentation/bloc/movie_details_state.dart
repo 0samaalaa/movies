@@ -13,6 +13,12 @@ class MovieDetailsLoaded extends MovieDetailsState {
   MovieDetailsLoaded(this.details, this.suggestions);
 }
 
+class FavoriteUpdated extends MovieDetailsState {
+  final bool isFavorite;
+  FavoriteUpdated(this.isFavorite);
+}
+
+
 class MovieDetailsError extends MovieDetailsState {
   final String message;
   MovieDetailsError(this.message);

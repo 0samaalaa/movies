@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/resources/app_images.dart';
-import '../../../../core/resources/app_colors.dart';
-import '../../../../core/resources/app_icons.dart';
-import '../../../../core/routes/routes.dart';
-import '../../../../core/utils/avatar_helper.dart';
+import '../../../movie_details/presentation/pages/movie_details.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
+import '../../../../core/resources/app_colors.dart';
+import '../../../../core/routes/routes.dart';
+import 'widgets/header.dart';
+import 'widgets/tab_view.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,234 +18,175 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
   int selectedTab = 0;
+  Map<String, dynamic> _localProfileData = {"name": "", "avaterId": 0, "phone": ""};
 
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>().add(LoadProfileEvent());
+    _loadProfileFromPrefs();
+    final bloc = context.read<ProfileBloc>();
+    bloc.add(LoadProfileListsEvent());
+    bloc.add(LoadProfileEvent());
+  }
+
+  Future<void> _loadProfileFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _localProfileData = {
+        "name": prefs.getString("userName") ?? "",
+        "avaterId": prefs.getInt("avatarId") ?? 0,
+        "phone": prefs.getString("phone") ?? "",
+      };
+    });
+  }
+
+  void _updateLocalProfile(String name, int avatarId, String phone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("userName", name);
+    await prefs.setInt("avatarId", avatarId);
+    await prefs.setString("phone", phone);
+    setState(() {
+      _localProfileData = {"name": name, "avaterId": avatarId, "phone": phone};
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: MColors.black,
-      body: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, state) {
-          if (state is ProfileLoading) {
-            return const Center(child: CircularProgressIndicator(color: MColors.yellow));
-          } else if (state is ProfileError) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
+    super.build(context);
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (state is ProfileInitial) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (_) => false);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: MColors.black,
+        body: Column(
+          children: [
+            Container(
+              color: MColors.dgrey,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: BlocBuilder<ProfileBloc, ProfileState>(
+                        builder: (context, state) {
+                          List<Map<String, dynamic>> history = [];
+                          List<Map<String, dynamic>> watchlist = [];
+                          if (state is ProfileFullLoaded) {
+                            history = state.history;
+                            watchlist = state.watchlist;
+                          }
+
+                          return ProfileHeader(
+                            userName: _localProfileData["name"],
+                            avatarId: _localProfileData["avaterId"],
+                            watchlistCount: watchlist.length,
+                            historyCount: history.length,
+                            onEditProfile: () async {
+                              if (_localProfileData["name"].isEmpty && _localProfileData["phone"].isEmpty) return;
+
+                              final result = await Navigator.pushNamed(
+                                context,
+                                Routes.editProfileScreen,
+                                arguments: {
+                                  "name": _localProfileData["name"],
+                                  "avaterId": _localProfileData["avaterId"],
+                                  "phone": _localProfileData["phone"],
+                                },
+                              );
+
+                              if (result != null && result is Map<String, dynamic>) {
+                                _updateLocalProfile(
+                                  result["name"] ?? _localProfileData["name"],
+                                  result["avaterId"] ?? _localProfileData["avaterId"],
+                                  result["phone"] ?? _localProfileData["phone"],
+                                );
+                              }
+                            },
+                            onLogout: () {
+                              context.read<ProfileBloc>().add(LogoutEvent());
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    ProfileTabs(
+                      selectedTab: selectedTab,
+                      onTabSelected: (index) => setState(() => selectedTab = index),
+                    ),
+                  ],
+                ),
               ),
-            );
-          } else if (state is ProfileLoaded) {
-            final profileData = state.profileData;
-            return Column(
-              children: [
-                Container(
-                  color: MColors.dgrey,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 30),
-                                  child: Column(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: AssetImage(
-                                          AvatarHelper.getAvatarAsset(profileData["avaterId"]),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 15),
-                                      Text(
-                                        profileData["name"] ?? "",
-                                        style: const TextStyle(
-                                          color: MColors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Spacer(),
-                                Column(
-                                  children: [
-                                    const Text("12",
-                                        style: TextStyle(
-                                            fontSize: 36,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                    const SizedBox(height: 8),
-                                    Text(l10n.watchList,
-                                        style: const TextStyle(
-                                            color: MColors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                                const SizedBox(width: 24),
-                                Column(
-                                  children: [
-                                    const Text("10",
-                                        style: TextStyle(
-                                            fontSize: 36,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                    const SizedBox(height: 8),
-                                    Text(l10n.history,
-                                        style: const TextStyle(
-                                            color: MColors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: MColors.yellow,
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.editProfileScreen,
-                                        arguments: profileData,
-                                      );
-                                    },
-                                    child: Text(
-                                      l10n.editProfile,
-                                      style: const TextStyle(
-                                        color: MColors.black,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  flex: 1,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: MColors.red,
-                                      padding: const EdgeInsets.symmetric(vertical: 15),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      final prefs = await SharedPreferences.getInstance();
-                                      await prefs.clear();
-                                      if (!mounted) return;
-                                      Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        Routes.onboardingScreen,
-                                            (_) => false,
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          l10n.exit,
-                                          style: const TextStyle(
-                                            color: MColors.white,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Image.asset(
-                                          MIcons.logout,
-                                          height: 20,
-                                          width: 20,
-                                          color: MColors.white,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15),
-                          ],
+            ),
+            Expanded(
+              child: BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  if (state is ProfileListsLoading) {
+                    return const Center(child: CircularProgressIndicator(color: MColors.yellow));
+                  } else if (state is ProfileFullLoaded) {
+                    final list = (selectedTab == 0 ? state.watchlist : state.history).reversed.toList();
+                    if (list.isEmpty) {
+                      return Center(
+                        child: Text(
+                          selectedTab == 0 ? l10n.watchList : l10n.history,
+                          style: const TextStyle(color: MColors.white, fontSize: 16),
                         ),
+                      );
+                    }
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(12),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.7,
                       ),
-                      Row(
-                        children: [
-                          Expanded(child: _buildTabItem(0, MIcons.items, l10n.watchList)),
-                          Expanded(child: _buildTabItem(1, MIcons.folder, l10n.history)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Image.asset(MImages.popcorn, height: 200),
-                  ),
-                ),
-              ],
-            );
-          }
-          return const SizedBox.shrink();
-        },
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        final movie = list[index];
+                        final movieId = int.tryParse((movie["movieId"] ?? movie["id"]).toString()) ?? 0;
+                        final imageUrl = movie["imageURL"] ?? movie["posterPath"] ?? "";
+                        return GestureDetector(
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => MovieDetailsScreen(movieId: movieId)),
+                            );
+                            context.read<ProfileBloc>().add(LoadProfileEvent());
+                            context.read<ProfileBloc>().add(LoadProfileListsEvent());
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                color: MColors.dgrey,
+                                child: const Icon(Icons.movie, color: MColors.white),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildTabItem(int index, String assetPath, String label) {
-    bool isSelected = selectedTab == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() => selectedTab = index);
-      },
-      child: Column(
-        children: [
-          Image.asset(
-            assetPath,
-            height: 28,
-            width: 28,
-            color: isSelected ? MColors.yellow : MColors.white,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? MColors.yellow : MColors.white,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          if (isSelected)
-            Container(
-              margin: const EdgeInsets.only(top: 6),
-              height: 3,
-              width: double.infinity,
-              color: MColors.yellow,
-            ),
-        ],
-      ),
-    );
-  }
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,18 +1,17 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-
-import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/resources/app_colors.dart';
-import '../../../../core/resources/app_icons.dart';
-import '../../../../core/routes/routes.dart';
-import '../../../../core/utils/avatar_helper.dart';
-import '../../../../core/widgets/custom_text_filed.dart';
-import '../../../../main.dart';
+import 'package:movies/features/profile/presentation/pages/widgets/LanguageToggleSwitch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../core/resources/app_colors.dart';
+import '../../../../../core/localization/app_localizations.dart';
+import '../../../auth/presentation/pages/reset_password.dart';
+import '../../../on_boarding/presentation/pages/onboarding_view.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
+import 'widgets/avatar_picker.dart';
+import 'widgets/profile_form_fields.dart';
+import 'widgets/profile_action_buttons.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -24,111 +23,31 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
-
-  int selectedAvatarId = 1; // default avatarId
-  late String selectedAvatar;
-
-  final List<String> avatars = AvatarHelper.allAvatars;
-
-  String getAvatarAsset(int? id) {
-    if (id != null && id > 0 && id <= avatars.length) {
-      return avatars[id - 1];
-    }
-    return avatars[0];
-  }
+  int selectedAvatarId = 1;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController();
     phoneController = TextEditingController();
-    selectedAvatar = getAvatarAsset(selectedAvatarId); // init with default
+    _loadProfileFromPrefs();
+    context.read<ProfileBloc>().add(LoadProfileEvent());
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final state = context.read<ProfileBloc>().state;
-    if (state is ProfileLoaded) {
-      final data = state.profileData;
-      nameController.text = data["name"] ?? "";
-      phoneController.text = data["phone"] ?? "";
-      selectedAvatarId = data["avaterId"] ?? 1;
-      selectedAvatar = getAvatarAsset(selectedAvatarId);
-    }
+  Future<void> _loadProfileFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      nameController.text = prefs.getString("userName") ?? "";
+      phoneController.text = prefs.getString("phone") ?? "";
+      selectedAvatarId = prefs.getInt("avatarId") ?? 1;
+    });
   }
 
-
-  void showAwesomeSnackBar(String title, String message, ContentType type) {
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: title,
-        message: message,
-        contentType: type,
-      ),
-    );
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
-
-  void openAvatarPicker() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-            decoration: BoxDecoration(
-              color: MColors.dgrey,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            padding: const EdgeInsets.all(16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: avatars.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-              ),
-              itemBuilder: (_, index) {
-                final avatar = avatars[index];
-                final isSelected = avatar == selectedAvatar;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedAvatar = avatar;
-                      selectedAvatarId = index + 1;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? MColors.yellow.withOpacity(0.56)
-                          : Colors.transparent,
-                      border: Border.all(color: MColors.yellow, width: 1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.all(3),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(avatar, fit: BoxFit.cover),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
+  void _saveToPrefs(String name, int avatarId, String phone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("userName", name);
+    await prefs.setInt("avatarId", avatarId);
+    await prefs.setString("phone", phone);
   }
 
   @override
@@ -139,45 +58,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: MColors.black,
-      appBar: AppBar(
-        backgroundColor: MColors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: MColors.yellow),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          l10n.editProfile,
-          style: const TextStyle(
-            color: MColors.yellow,
-            fontWeight: FontWeight.bold,
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (state is ProfileUpdated) {
+          _saveToPrefs(nameController.text.trim(), selectedAvatarId, phoneController.text.trim());
+          Navigator.pop(context, {
+            "name": nameController.text.trim(),
+            "avaterId": selectedAvatarId,
+            "phone": phoneController.text.trim(),
+          });
+        } else if (state is ProfileDeleted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const OnboardingView()),
+                (route) => false,);
+        } else if (state is ProfileError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: MColors.black,
+          appBar: AppBar(
+            backgroundColor: MColors.black,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: MColors.yellow),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: Text(
+              l10n.editProfile,
+              style: const TextStyle(color: MColors.yellow, fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
           ),
-        ),
-        centerTitle: true,
-      ),
-      body: BlocConsumer<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileUpdated) {
-            showAwesomeSnackBar("Success", state.message, ContentType.success);
-            Future.delayed(const Duration(seconds: 1), () {
-              Navigator.pop(context);
-            });
-          } else if (state is ProfileError) {
-            showAwesomeSnackBar("Error", state.message, ContentType.failure);
-          } else if (state is ProfileDeleted) {
-            showAwesomeSnackBar("Success", state.message, ContentType.success);
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.loginScreen, (route) => false);
-          }
-        },
-        builder: (context, state) {
-          return Padding(
+          body: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -185,153 +104,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        GestureDetector(
-                          onTap: openAvatarPicker,
-                          child: CircleAvatar(
-                            radius: 60,
-                            backgroundImage: AssetImage(selectedAvatar),
-                          ),
+                        AvatarPicker(
+                          selectedAvatarId: selectedAvatarId,
+                          onAvatarSelected: (id) => setState(() => selectedAvatarId = id),
                         ),
                         const SizedBox(height: 30),
-                        CustomTextFiled(
-                          controller: nameController,
-                          hintText: l10n.name,
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Image.asset(MIcons.name,
-                                width: 20, height: 20, color: MColors.white),
+                        ProfileFormFields(
+                          nameController: nameController,
+                          phoneController: phoneController,
+                          onResetPassword: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
                           ),
-                        ),
-                        const SizedBox(height: 30),
-                        CustomTextFiled(
-                          controller: phoneController,
-                          hintText: 'phone',
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Image.asset(MIcons.call,
-                                width: 20, height: 20, color: MColors.white),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, Routes.resetPasswordScreen);
-                            },
-                            child: Text(
-                              l10n.resetPassword,
-                              style: const TextStyle(
-                                color: MColors.yellow,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
                 ),
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: AnimatedToggleSwitch<String>.rolling(
-                    current: Localizations.localeOf(context).languageCode,
-                    values: const ["en", "ar"],
-                    height: 43,
-                    indicatorSize: const Size(43, 43),
-                    spacing: 20,
-                    onChanged: (newLang) {
-                      final newLocale = Locale(newLang);
-                      MoviesApp.of(context)?.setLocale(newLocale);
-                    },
-                    iconBuilder: (value, foreground) {
-                      final flag = value == "en" ? MIcons.en : MIcons.arabic;
-                      return Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: foreground
-                              ? Border.all(color: MColors.yellow, width: 4)
-                              : null,
-                        ),
-                        child: ClipOval(
-                          child: Image.asset(flag, fit: BoxFit.cover),
-                        ),
-                      );
-                    },
-                    style: ToggleStyle(
-                      backgroundColor: Colors.transparent,
-                      borderRadius: const BorderRadius.all(Radius.circular(25)),
-                      borderColor: MColors.yellow,
-                      indicatorColor: Colors.transparent,
-                      indicatorBorder:
-                      Border.all(color: MColors.yellow, width: 4),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 16),
+                const LanguageToggleSwitch(),
                 const SizedBox(height: 50),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.read<ProfileBloc>().add(DeleteAccountEvent());
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MColors.red,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        child: Text(
-                          l10n.deleteAccount,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: MColors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.read<ProfileBloc>().add(
-                            UpdateProfileEvent(
-                              name: nameController.text.trim(),
-                              phone: phoneController.text.trim(),
-                              avatarId: selectedAvatarId,
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MColors.yellow,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        child: Text(
-                          l10n.updateData,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: MColors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                ProfileActionButtons(
+                  onUpdate: () {
+                    final name = nameController.text.trim();
+                    final phone = phoneController.text.trim();
+                    context.read<ProfileBloc>().add(UpdateProfileEvent(
+                      name: name,
+                      phone: phone,
+                      avatarId: selectedAvatarId,
+                    ));
+                  },
+                  onDelete: () => context.read<ProfileBloc>().add(DeleteAccountEvent()),
                 ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

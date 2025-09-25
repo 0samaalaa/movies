@@ -249,6 +249,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get war => 'حرب';
   @override
   String get western => 'غربي';
+  @override
+  String get noSimilar => 'لا توجد افلام مشابهة';
 
 
 

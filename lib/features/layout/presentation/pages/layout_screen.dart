@@ -15,7 +15,7 @@ class LayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LayoutCubit, LayoutState>(
       builder: (context, state) {
-        final screens = [
+        final screens = <Widget>[
           const HomeScreen(),
           const SearchScreen(),
           BrowseScreen(initialGenre: state.initialGenre),

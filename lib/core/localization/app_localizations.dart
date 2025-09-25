@@ -479,6 +479,7 @@ abstract class AppLocalizations {
   String get talkShow;
   String get war;
   String get western;
+  String get noSimilar;
 
 
 

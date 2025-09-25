@@ -247,6 +247,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get war => 'War';
   @override
   String get western => 'Western';
+  @override
+  String get noSimilar => 'No similar movies';
 
 
 

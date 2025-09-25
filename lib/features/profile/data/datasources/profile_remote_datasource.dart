@@ -47,4 +47,19 @@ class ProfileRemoteDatasource {
       throw Exception("Failed to delete account");
     }
   }
+
+  Future<List<Map<String, dynamic>>> getFavorites(String token) async {
+    final res = await http.get(
+      Uri.parse("$baseUrl/favorites/all"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      final list = body["data"] as List<dynamic>? ?? [];
+      return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    } else {
+      throw Exception("Failed to load favorites");
+    }
+  }
 }

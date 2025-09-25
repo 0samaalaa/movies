@@ -4,7 +4,7 @@ import '../../../../core/resources/app_colors.dart';
 import '../../../home/presentation/bloc/movie_bloc.dart';
 import '../../../home/presentation/bloc/movie_event.dart';
 import '../../../home/presentation/bloc/movie_state.dart';
-import '../../../layout/presentation/cubit/Layout_cubit.dart';
+import '../../../layout/presentation/cubit/layout_cubit.dart';
 import '../widgets/genere_tab_bar.dart';
 import '../widgets/movie_grid.dart';
 
@@ -60,7 +60,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
   void scrollToSelectedTab(int index) {
     const double tabWidth = 90.0;
     final double screenWidth = MediaQuery.of(context).size.width;
-
     double offset = (tabWidth * index) - (screenWidth / 2) + (tabWidth / 2);
     if (offset < 0) offset = 0;
     if (genreTabController.hasClients) {
@@ -86,7 +85,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return BlocListener<LayoutCubit, LayoutState>(
       listenWhen: (previous, current) =>
       previous.initialGenre != current.initialGenre,
@@ -120,7 +118,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         loadGenresFromMovies(state);
                       });
                     }
-
                     return GenreTabBar(
                       allGenres: allGenres,
                       selectedGenre: selectedGenre,

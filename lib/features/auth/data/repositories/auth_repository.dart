@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../../../core/utils/token_manager.dart';
 
 class AuthRepository {
   static const String _baseUrl = "https://route-movie-apis.vercel.app/";
@@ -15,11 +16,12 @@ class AuthRepository {
       body: jsonEncode({"email": email, "password": password}),
     );
     final jsonData = jsonDecode(response.body);
-
     if (response.statusCode == 200) {
-      return jsonData["data"];
+      final token = jsonData["data"];
+      await TokenManager.saveToken(token);
+      return token;
     } else {
-      throw jsonData["message"] ?? "Login failed";
+      throw Exception(jsonData["message"] ?? "Login failed");
     }
   }
 
@@ -47,10 +49,16 @@ class AuthRepository {
     );
 
     final jsonData = jsonDecode(response.body);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonData["message"] ?? "Registered successfully";
     } else {
       throw Exception(jsonData["message"] ?? "Registration failed");
     }
+  }
+
+  Future<void> logout() async {
+    await TokenManager.clearToken();
+
   }
 }
